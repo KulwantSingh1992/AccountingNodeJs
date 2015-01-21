@@ -1,0 +1,34 @@
+  <div ng-if="main.dashboard=='sell'" ng-controller="SellDetailsCtrl" ng-init="getResult()">
+    <table st-table="values" class="table table-bordered">
+      <thead>
+        <tr>
+          <th st-sort="ProductName">Product Name</th>
+          <th st-sort="MSP">MSP</th>
+          <th st-sort="QtyToSell">Qty To Sell</th>
+          <th st-sort="AMAZON">Amazon</th>
+          <th st-sort="FK">FlipKart</th>
+        </tr>
+        <tr>
+          <th colspan="5">
+            <input class="form-control" ng-model="productFilterForm.productName" ng-enter="searchProductByName()"/>
+          </th>
+        </tr>
+      </thead>
+    <tbody>
+      <tr ng-repeat="sell in values">
+        <td>{{sell.product_name}}</td>
+        <td>{{sell.product_min_price || '-'}}</td>
+        <td>{{sell.product_available_quantity || '-'}}</td>
+        <td>{{sell.product_amazon_id || '-'}}</td>
+        <td>{{sell.product_fk_id || '-'}}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="10"></div>
+        </td>
+      </tr>
+    </tfoot>
+    </table>
+  </div>
