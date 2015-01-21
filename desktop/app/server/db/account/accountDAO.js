@@ -1,3 +1,0 @@
-//Insert Query
-
-//Select Query
