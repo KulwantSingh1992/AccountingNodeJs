@@ -1,0 +1,12 @@
+var productDB = require('../../db/product/productDAO');
+var tallyService = require('./tallyAccountService');
+var logger = require('../../lib/logger');
+
+exports.getAccountingDetails = function(startDate, endDate, cb, err) {
+    productDB.getTallyCredentials(invokeAccountingDetails);
+    function invokeAccountingDetails(cred){
+        console.log(cred);
+        if(cred.URL) tallyService.getAccountingDetails(cred, startDate, endDate, cb, err);
+    }
+};
+

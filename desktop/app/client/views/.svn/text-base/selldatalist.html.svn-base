@@ -1,0 +1,146 @@
+<div class="row clearfix" ng-if="main.dashboard=='selllist'" ng-controller="SellDetailsCtrl">
+    <div class="col-md-12 column" ng-init="getResult()">
+        <div class="panel panel-info">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <span class="panel-title"><span class="prod-name" style="font-weight: bold;">Sell Online</span></span>
+                <div class="btn-group pull-right widget-header-action">
+                    <button class="btn btn-primary" type="button" ng-click="getResult();">
+                        <em>Sync Data</em>
+                    </button>
+					<button class="btn btn-default" type="button" ng-click="main.dashboard='dashboard'">
+                        <em class="glyphicon glyphicon-home"></em>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="panel-group" style="margin-bottom: 0px">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <form role="form" class="form-inline form-filter">
+                                <div class="form-group">
+                                    <input class="form-control" ng-model="productFilterForm.productName" type="text" placeholder="Product Name" ng-enter="searchProductByName()">
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" ng-model="productFilterForm.status">
+                                        <option value="" selected disabled class="hide">Status</option>
+                                        <option value="all">All</option>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                        <option value="mapped">Mapped</option>
+                                        <option value="unmapped">Unmapped</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div>
+                        <table id="maintable" class="table" style="margin-bottom: 0px">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Product Name</th>
+                                    <th>Minimum Selling Price</th>
+                                    <th>Quantity</th>
+                                    <th>MRP</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat-start="value in values | filter:pname">
+                                    <td style="text-align: center">#
+                                        <!--<i class="btn btn-default glyphicon glyphicon-plus-sign"></i>
+                                        <i class="btn btn-default glyphicon glyphicon-minus-sign"></i>-->
+                                    </td>
+                                    <td role="tab" data-toggle="collapse" href="/#sellProduct{{$index}}" aria-expanded="true"><a>{{value.product_name}}</a>
+                                    </td>
+
+                                    <td>
+                                        <sapn ng-if="value.product_min_price">{{value.product_min_price | currency:"&#8377;"}}</sapn>
+                                        <sapn ng-if="!value.product_min_price">-</sapn>
+                                    </td>
+
+                                    <td>{{value.product_available_quantity || '-'}}</td>
+
+                                    <td>
+                                        <sapn ng-if="value.product_max_price">{{value.product_max_price | currency:"&#8377;"}}</sapn>
+                                        <sapn ng-if="!value.product_max_price">-</sapn>
+                                    </td>
+
+
+                                    <td style="padding: 2px;">
+                                        <button ng-click="openSellDataModal(value)" data-toggle="modal" data-target=".1bs-example-modal-lg" data-backdrop="false" class="btn btn-primary">Map</button>
+                                    </td>
+                                </tr>
+                                <tr ng-if="value.product_amazon_id || value.product_fk_id" id="sellProduct{{$index}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading" style="background-color: #f9f9f9;" ng-repeat-end>
+                                    <td colspan="9">
+                                        <table class="table-condensed subtablepos" ng-repeat="channelDetails in activeChannelsConfigs">
+                                            <tr ng-if="value[channelDetails.marketplaceID]">
+                                                <td colspan="50"><img ng-src="images/{{channelDetails.name.toLowerCase()}}-order-24x24.png" style="height: 30px;"/>
+                                                    <div class="btn-group pull-right">
+                                                        <button ng-click="listSellData(value, channelDetails.marketplaceID)" class="btn btn-default" style="background-color: #eee;">List</button>
+                                                        <button ng-click="listAndSellSellData(value, channelDetails.marketplaceID)" class="btn btn-default" style="background-color: #eee;">List & Sell</button>    
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr ng-if="value[channelDetails.marketplaceID]">
+                                                <td ng-repeat="item in channelDetails.config" style="width: {{100/channelDetails.config.length}}%">
+                                                    <sapn>{{item.name}}</sapn>
+                                                    <input type="text" ng-model="value['product_' + channelDetails.name.toLowerCase() + '_' + item.name]" class="form-control" style="width: 90px;padding: 5px;height: 25px;"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="selldatamodal" class="modal fade 1bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Map Products
+                    <div class="btn-group pull-right widget-header-action">
+                        <button class="btn btn-default" type="button" data-dismiss="modal">
+                            <em class="glyphicon glyphicon-remove"></em>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <input ng-enter="searchProductByNameForMapping()" ng-model="productsFilterFormForMapping.productName" class="form-control" type="text" placeholder="Search Products" style="width:20%;" />
+                        <div ng-hide="show_hide" style="padding: 10px;font-size:14px;color:#337ab7;"></div>
+                    </div>
+                    <div class="panel-body">
+                        <form id="map-product-form" role="form">
+                            <table class="table">
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>Product SKU</th>
+                                    <th ng-repeat="channelDetails in activeChannelsConfigs">{{channelDetails.name}} Id</th>
+                                </tr>
+                                <tr ng-repeat="item in productsForMapping">
+                                    <th>{{item.product_name}}</th>
+                                    <th>
+                                        <input class="form-control" type="text" name="pSKU" ng-model="item.product_sku" value="{{item.product_sku}}" />
+                                    </th>
+                                    <th ng-repeat="channelDetails in activeChannelsConfigs">
+                                        <input class="form-control" type="text" ng-model="item[channelDetails.marketplaceID]" value="{{item[channelDetails.marketplaceID]}}" />
+                                    </th>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-primary pull-right" ng-click="submitMapProductForm()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

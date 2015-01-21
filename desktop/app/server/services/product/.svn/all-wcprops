@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/paxcomterminal/!svn/ver/348/trunk/desktop/app/server/services/product
+END
+paytmProductService.js
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/paxcomterminal/!svn/ver/298/trunk/desktop/app/server/services/product/paytmProductService.js
+END
+productService.js
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/paxcomterminal/!svn/ver/346/trunk/desktop/app/server/services/product/productService.js
+END
+tallyProductservice.js
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/paxcomterminal/!svn/ver/348/trunk/desktop/app/server/services/product/tallyProductservice.js
+END
+flipkartProductService.js
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/paxcomterminal/!svn/ver/335/trunk/desktop/app/server/services/product/flipkartProductService.js
+END

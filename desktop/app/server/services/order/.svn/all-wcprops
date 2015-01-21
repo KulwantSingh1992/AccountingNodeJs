@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/paxcomterminal/!svn/ver/345/trunk/desktop/app/server/services/order
+END
+orderService.js
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/paxcomterminal/!svn/ver/345/trunk/desktop/app/server/services/order/orderService.js
+END
+tallyorderservice.js
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/paxcomterminal/!svn/ver/68/trunk/desktop/app/server/services/order/tallyorderservice.js
+END
+flipkartorderservice.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/paxcomterminal/!svn/ver/335/trunk/desktop/app/server/services/order/flipkartorderservice.js
+END
+ebayorderservice.js
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/paxcomterminal/!svn/ver/68/trunk/desktop/app/server/services/order/ebayorderservice.js
+END
+amazonOrderService.js
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/paxcomterminal/!svn/ver/345/trunk/desktop/app/server/services/order/amazonOrderService.js
+END
+paytmOrderService.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/paxcomterminal/!svn/ver/298/trunk/desktop/app/server/services/order/paytmOrderService.js
+END
