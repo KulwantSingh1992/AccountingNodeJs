@@ -8,13 +8,16 @@
     }
   </style>
   <script>
-    function bodyOnLoad(){
-      require('./server.js');
-      window.location.assign('http://localhost:3000/');
-    }
+   
   </script>
 </head>
-<body onload="bodyOnLoad()">
-<div class="loading"></div>
+<body >
+
+<form action="/showSheetUploadForm" enctype="multipart/form-data" method="post">
+  <div>	    <input type="radio" name="format" value="xlsx">xlsx<br>
+        <input type="radio" name="format" value="csv">csv<br>
+		<input type="file" name="upload" multiple="multiple"><br>
+		<input type="submit" value="Upload">
+	   </div> </form>
 </body>
 </html>

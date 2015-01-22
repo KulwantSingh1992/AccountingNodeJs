@@ -1,6 +1,8 @@
-var express = require("express"),
+var express = require("express");
     path = require("path");
+	var logger = require('./server/lib/logger');   //kulwant singh put this line here
 var app = express();
+var formidable=require('formidable');
 
 process.on('uncaughtException', function(err) {
   logger.debug(err);
@@ -10,8 +12,9 @@ process.on('uncaughtException', function(err) {
 });
 
 app.configure(function () {
-    app.set('port', process.env.PORT || 3000);
-    app.use(express.bodyParser()),
+    //app.set('port', process.env.PORT || 3000);
+	app.listen(3000);
+    //app.use(express.bodyParser()),
     app.use(express.static(path.join(__dirname, 'client')));
 });
 
@@ -30,11 +33,10 @@ var productService = require('./server/services/product/productService');
 var dashboardService = require('./server/services/dashboardService');
 var accountService = require('./server/services/account/accountService');
 var bkg = require('./server/processes/dashboardBackgroundProcess');
-var logger = require('./server/lib/logger');
+
 var util = require('./server/services/util/util');
 var configService = require('./server/services/config/configService');
-var updater = require('./server/updater');
-
+//var updater = require('./server/updater');
 
 app.get('/initializeAmazon', function (req, res) {
     amazonOrderService.startGetOrders();
@@ -56,14 +58,7 @@ app.get('/order/external/:id', function (req, res) {
     }, null);
 });
 
-app.post('/orderitem', function (req, res) {
-    logger.debug(req.body);
-    orderService.getOrderItems(util.prepareOrderFilter(req.body), function (result) {
-        res.send(result);
-    }, null);
-});
-
-app.post('/order/count', function (req, res) {
+app.post('/order/count',function (req, res) {
     var channel = req.body.channel;
     var Filter = orderService.Filter;
     var filters = [];
@@ -74,6 +69,15 @@ app.post('/order/count', function (req, res) {
         res.send(JSON.stringify(result));
     }, null);
 });
+
+app.post('/orderitem', function (req, res) {
+    logger.debug(req.body);
+    orderService.getOrderItems(util.prepareOrderFilter(req.body), function (result) {
+        res.send(result);
+    }, null);
+});
+
+
 
 app.get('/order/dashboard/detail', function (req, res) {
     res.send(dashboardService.getOrderDetails());
@@ -236,9 +240,6 @@ app.get('/updateNewVersion', function (req, res) {
 });
 
 
-app.listen(app.get('port'));
-console.log('Server listening on port ' + app.get('port'));
-
 
 /** product listing calls urls*/
 
@@ -326,7 +327,9 @@ app.post('/product/:id/sell/:channel', function (req, res) {
 //Upload Sheet Code
 app.post('/showSheetUploadForm', function (req, res) {
     //SendForm to browser
+	accountService.storePaymentSheetData(req,res);
 });
+
 app.post('/storePaymentSheetData', function (req, res) {
     //use Formidable to parse
     //Get Format
