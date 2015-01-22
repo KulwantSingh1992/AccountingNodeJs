@@ -1,9 +1,8 @@
 
-var xlsxx = require('../../../excel');
+var xlsxx = require('excel');
 
 function excelParse(file){
  
-var db=sql.open();
 /*
 function convertToJSON(array) {
   var first = array[0].join()
@@ -32,8 +31,6 @@ xlsxx(file, function(err,data) {
     //console.log(jsonDataArray(data));
 	//console.log(file);
 	//console.log(data);
-    queries.queryInsert(db,data,'xlsx');
-   sql.close();
    //console.log(data.length);
     //console.log(data);
 });
