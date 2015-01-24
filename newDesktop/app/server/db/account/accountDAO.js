@@ -61,13 +61,15 @@ db.all(refExistsCount,data[0],data[5],function(err,rows){if(rows.length==0)fun(0
 }
 
 function insertAcctgTrans(){
-
-db.all(getDataFromPaymentSummary,function(err,row){
-//console.log(row);
+var row=[[]];
+db.all(getDataFromPaymentSummary,function(err,rows){
+row=rows;
+});
+for(var i=0;i<row.length;i++)
 db.beginTransaction(function (err, transaction) {
-	transaction.run(insertAcctgTransQuery, [row['invoice_id'],'',row['description'],row['settlement_date'],'',row['settlement_ref_id']
-	           ,row['settlement_date'],row['order_id'],row['order_item_id'],'']);
-	console.log(row);
+	transaction.run(insertAcctgTransQuery, [row[i]['invoice_id'],'',row[i]['description'],row[i]['settlement_date'],'',row[i]['settlement_ref_id']
+	           ,row[i]['settlement_date'],row[i]['order_id'],row[i]['order_item_id'],'']);
+	console.log(row[i]);
         transaction.commit(function (err) {
             if (err) {
                 console.error(err);
@@ -77,10 +79,29 @@ db.beginTransaction(function (err, transaction) {
     });
 
 
-});
+
 }
 
 function insertAcctgTransEntry(){
+
+db.all(getDataFromPaymentSummary,function(err,row){
+var row=[[]];
+db.all(getDataFromPaymentSummary,function(err,rows){
+row=rows;
+});
+//change kall leyo ehde vich
+for(var i=0;i<row.length;i++)
+db.beginTransaction(function (err, transaction) {
+	transaction.run(insertAcctgTransEntryQuery, [row[i]['invoice_id'],'',row[i]['description'],row[i]['settlement_date'],'',row[i]['settlement_ref_id']
+	           ,row[i]['settlement_date'],row[i]['order_id'],row[i]['order_item_id'],'']);
+	console.log(row[i]);
+        transaction.commit(function (err) {
+            if (err) {
+                console.error(err);
+                transaction.rollback();
+            }
+        });
+    });
 
 
 }
