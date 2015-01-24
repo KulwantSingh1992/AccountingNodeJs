@@ -12,7 +12,7 @@ var channel = 'FK';
 var service = 'orders';
 
 exports.startGetOrders = function (cb) {  
-    orderService.getLastSync(channel, service, function(credentials, extra, lastSync){
+  /*  orderService.getLastSync(channel, service, function(credentials, extra, lastSync){
         if(credentials.SellerID){
             if(!lastSync){
                 lastSync = 1417066000;
@@ -23,7 +23,7 @@ exports.startGetOrders = function (cb) {
                 logger.error(e);
             }
         }
-    });
+    });*/
 };
 
 var getOrders = function (sellerId, createdAfter, cb) {

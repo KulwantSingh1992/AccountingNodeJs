@@ -22,33 +22,31 @@ function storePaymentSheetData(req,res) {
 		//  excel.excel(util.inspect(files['upload']['path']));
 		  sheetType=fields['sheetType'];
 	 	 if(fields['format']=='csv'){
-			fs.copy(files['upload']['path'], '../../..TempUploaded/file.csv', { replace: true },
+			fs.copy(files['upload']['path'], '../../../TempUploaded/file.csv', { replace: false },
 		 		function (err) {
 		        		if (err) {
 		           			// i.e. file already exists or can't write to directory
 						throw err;
 				} else {
-					csvParser.csvParse('../../..TempUploaded/file.csv',sheetType);
-					fs.remove('../../..TempUploaded/file.csv');  //this line should come in each of parsing file .
+					csvParser.csvParse('../../../TempUploaded/file.csv',sheetType,res);
+					fs.remove('../../../TempUploaded/file.csv');  //this line should come in each of parsing file .
 			          }
 	  
 			});
 	     	} else if(fields['format']=='xlsx'){
-			fs.copy(files['upload']['path'], '../../..TempUploaded/file.xlsx', { replace: false },
+			fs.copy(files['upload']['path'], '../../../TempUploaded/file.xlsx', { replace: false },
         		function (err) {
                   		if (err) {
 				    // i.e. file already exists or can't write to directory
 				        throw err;
 				} else {
-					excelParser.excelParse('../../..TempUploaded/file.xlsx',sheetType);
-                 			fs.remove('../../..TempUploaded/file.xlsx'); //this line should come in each of parsing file .
+					        excelParser.excelParse('../../../TempUploaded/file.xlsx',sheetType,res);
+                 			fs.remove('../../../TempUploaded/file.xlsx'); //this line should come in each of parsing file .
                    		}
 			 });
 		}
 	});
-	res.writeHead(200, {'content-type': 'text/plain'});
-	res.write('Received upload:\n\n');
-	res.end('kulwanignh');
+
 }
 
 function createFlipkartPaymentSheet(data) {
@@ -56,8 +54,10 @@ function createFlipkartPaymentSheet(data) {
 			//Check sheet's column count, sequence and name
 			//Check if settlementId, date time, type is not empty
 			//Check if settlementId exists in PaymentSummary entity
-			var existingCount = accountDB.refAlreadyExists(data[0]);
-		     console.log(existingCount);
+			accountDB.refAlreadyExistsFlipkart(data,function(count){if(count==0){
+			accountDB.importFlipkartPaymentSheet(data);
+			}});
+		     
 }
 
 function createAmazonPaymentSheet(data) {
@@ -65,7 +65,11 @@ function createAmazonPaymentSheet(data) {
 			//Check sheet's column count, sequence and name
 			//Check if settlementId, date time, type is not empty
 			//Check if settlementId exists in PaymentSummary entity
-			var existingCount = accountDB.refAlreadyExists(data[1]);
-		     console.log(existingCount);
+			 accountDB.refAlreadyExistsAmazon(data,function(count){if(count==0){
+			 accountDB.importAmazonPaymentSheet(data);
+			 }});
+		    
 }
 exports.storePaymentSheetData=storePaymentSheetData;
+exports.createAmazonPaymentSheet=createAmazonPaymentSheet;
+exports.createFlipkartPaymentSheet=createFlipkartPaymentSheet;
