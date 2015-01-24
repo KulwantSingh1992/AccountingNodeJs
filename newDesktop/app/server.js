@@ -322,7 +322,8 @@ app.post('/product/:id/sell/:channel', function (req, res) {
 //Upload Sheet Code
 app.post('/showSheetUploadForm', function (req, res) {
     //SendForm to browser
-	accountService.storePaymentSheetData(req,res);
+	//accountService.storePaymentSheetData(req,res);
+	accountService.insertAcctgTrans();
 });
 
 app.post('/storePaymentSheetData', function (req, res) {

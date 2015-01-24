@@ -70,6 +70,11 @@ function createAmazonPaymentSheet(data) {
 			 }});
 		    
 }
+
+function insertAcctgTrans(){
+      accountDB.insertAcctgTrans();
+}
 exports.storePaymentSheetData=storePaymentSheetData;
 exports.createAmazonPaymentSheet=createAmazonPaymentSheet;
 exports.createFlipkartPaymentSheet=createFlipkartPaymentSheet;
+exports.insertAcctgTrans=insertAcctgTrans;
