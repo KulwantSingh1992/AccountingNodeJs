@@ -33,19 +33,37 @@ function csvParse(file, sheetType,res){
 				}				
 				if(data[0]!=''&&data[1]!=''&&data[2]!='')
 			  	accountService.createAmazonPaymentSheet(data);
+				
 			  	//Get data from GlAccount entity
 			  	accountService.insertAcctgTrans("ACTG_001","PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",data[1],data[0],
-				,null,null, null);
+				,data[3],null, null);
+								
 				//1st entry
-				accountService.insertAcctgTransEntry("ACTG_001","ACTG_ENTRY_001","_NA_",null,null,"BANK_STLMNT_ACCOUNT", 						"BANK_001","PAXCOM",data[12],"INR", bankAmount, debitCreditFlag, "AES_NOT_RECONCILED", "ASSET");
+					accountService.insertAcctgTransEntry("ACTG_001","ACTG_ENTRY_001","_NA_",data[1],null,null,"BANK_STLMNT_ACCOUNT",
+      				"BANK_001","PAXCOM",bankAmount,"INR", debitCreditFlag, "AES_NOT_RECONCILED", "ASSET");
 				//2nd entry
-				if(Number(data[15]) >0) {
-				accountService.insertAcctgTransEntry"ACTG_00", "ACTG_ENTRY_002", "_NA_",null,null, "BANK_STLMNT_ACCOUNT", 						"BANK_001","PAXCOM",data[12],"INR", bankAmount, debitCreditFlag, "AES_NOT_RECONCILED", "ASSET");
+				if(Number(data[16]) >0) {
+				accountService.insertAcctgTransEntry("ACTG_002", "ACTG_ENTRY_002", "_NA_",data[1],null,"SERVICE_TAX_AUTH", "TAX_ACCOUNT",
+				   "BANK_001","PAXCOM",bankAmount,"INR", "D", "AES_NOT_RECONCILED", "ASSET");
 				}
 				//3rd entry
-				if(Number(data[13]) > 0) {
-				accountService.insertAcctgTransEntry"ACTG_001", "ACTG_ENTRY_003", "_NA_",null,"CARRIER", "SHIPPING_EXPENSE", 					"BANK_001","PAXCOM",data[12],"INR", bankAmount, "D", "AES_NOT_RECONCILED", "ASSET");
+				if(Number(data[])>0){
+				accountService.insertAcctgTransEntry("ACTG_003", "ACTG_ENTRY_003", "_NA_",data[1],null,"CNCL_AGENT", "CANCELLATION_EXPENSE", 
+				  "BANK_001","PAXCOM",bankAmount,"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+					
 				}
+				
+				if(Number(data[14]) > 0) {
+				accountService.insertAcctgTransEntry("ACTG_004", "ACTG_ENTRY_004", "_NA_",data[1],"carrierPartyId","CARRIER", "SHIPPING_EXPENSE", 
+				  "BANK_001","PAXCOM",bankAmount,"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+				}
+				
+				if(Number(data[])>0){
+				accountService.insertAcctgTransEntry("ACTG_005", "ACTG_ENTRY_005", "_NA_",data[1],null,"COMSN_AGENT", "COMMISSION_EXPENSE", 
+				  "BANK_001","PAXCOM",bankAmount,"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+				
+				}
+				
 			 }
 			  else ;//reponse for if one of entity is not present;
 			  
