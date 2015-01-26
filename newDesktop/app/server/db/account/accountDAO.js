@@ -60,51 +60,30 @@ db.all(refExistsCount,data[0],data[5],function(err,rows){if(rows.length==0)fun(0
 
 }
 
-function insertAcctgTrans(){
-var row=[[]];
-db.all(getDataFromPaymentSummary,function(err,rows){
-row=rows;
-});
-for(var i=0;i<row.length;i++)
+function insertAcctgTrans(acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,  voucher_ref, voucher_date, order_id, inventory_item_id, party_id){
 db.beginTransaction(function (err, transaction) {
-	transaction.run(insertAcctgTransQuery, [row[i]['invoice_id'],'',row[i]['description'],row[i]['settlement_date'],'',row[i]['settlement_ref_id']
-	           ,row[i]['settlement_date'],row[i]['order_id'],row[i]['order_item_id'],'']);
-	console.log(row[i]);
-        transaction.commit(function (err) {
-            if (err) {
-                console.error(err);
-                transaction.rollback();
-            }
-        });
-    });
-
-
-
-}
+	transaction.run(insertAcctgTransQuery, acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,  				voucher_ref,voucher_date, order_id, inventory_item_id, party_id);
+		transaction.commit(function (err) {
+		    if (err) {
+			console.error(err);
+			transaction.rollback();
+		    }
+		});
+	});
 
 function insertAcctgTransEntry(){
-
-db.all(getDataFromPaymentSummary,function(err,row){
-var row=[[]];
-db.all(getDataFromPaymentSummary,function(err,rows){
-row=rows;
-});
 //change kall leyo ehde vich
-for(var i=0;i<row.length;i++)
+
 db.beginTransaction(function (err, transaction) {
-	transaction.run(insertAcctgTransEntryQuery, [row[i]['invoice_id'],'',row[i]['description'],row[i]['settlement_date'],'',row[i]['settlement_ref_id']
-	           ,row[i]['settlement_date'],row[i]['order_id'],row[i]['order_item_id'],'']);
-	console.log(row[i]);
-        transaction.commit(function (err) {
-            if (err) {
-                console.error(err);
-                transaction.rollback();
-            }
-        });
+	transaction.run(insertAcctgTransEntryQuery,acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,party_id, role_type_id, 			gl_account_type_id , gl_account_id, organization_party_id, amount, currency_uom_idT, debit_credit_flag, reconcile_status_id, 			gl_account_class);
+		transaction.commit(function (err) {
+		    if (err) {
+		        console.error(err);
+		        transaction.rollback();
+		    }
+		});
     });
 
-
-}
 
 exports.refAlreadyExistsAmazon=refAlreadyExistsAmazon;
 exports.refAlreadyExistsFlipkart=refAlreadyExistsFlipkart;

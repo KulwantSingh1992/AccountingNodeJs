@@ -23,12 +23,34 @@ function csvParse(file, sheetType,res){
 			count++;}
 			else //console.log(data);
 			{
-			  if(validated)	{		if(data[0]!=''&&data[1]!=''&&data[2]!='')
-			  accountService.createAmazonPaymentSheet(data);}
+			  if(validated)	{		
+				var bankAmount = Number(data[12]) - (Number(data[16]) + Number(data[18]) + Number(data[19])) + Number(data[15]);
+				var debitCreditFlag;
+				if(bankAmount >= 0) {
+					debitCreditFlag = "D";
+				} else {
+					debitCreditFlag = "C";
+				}				
+				if(data[0]!=''&&data[1]!=''&&data[2]!='')
+			  	accountService.createAmazonPaymentSheet(data);
+			  	//Get data from GlAccount entity
+			  	accountService.insertAcctgTrans("ACTG_001","PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",data[1],data[0],
+				,null,null, null);
+				//1st entry
+				accountService.insertAcctgTransEntry("ACTG_001","ACTG_ENTRY_001","_NA_",null,null,"BANK_STLMNT_ACCOUNT", 						"BANK_001","PAXCOM",data[12],"INR", bankAmount, debitCreditFlag, "AES_NOT_RECONCILED", "ASSET");
+				//2nd entry
+				if(Number(data[15]) >0) {
+				accountService.insertAcctgTransEntry"ACTG_00", "ACTG_ENTRY_002", "_NA_",null,null, "BANK_STLMNT_ACCOUNT", 						"BANK_001","PAXCOM",data[12],"INR", bankAmount, debitCreditFlag, "AES_NOT_RECONCILED", "ASSET");
+				}
+				//3rd entry
+				if(Number(data[13]) > 0) {
+				accountService.insertAcctgTransEntry"ACTG_001", "ACTG_ENTRY_003", "_NA_",null,"CARRIER", "SHIPPING_EXPENSE", 					"BANK_001","PAXCOM",data[12],"INR", bankAmount, "D", "AES_NOT_RECONCILED", "ASSET");
+				}
+			 }
 			  else ;//reponse for if one of entity is not present;
 			  
 			 }
-			//Check Column's name and length
+			//Check Column's name and length 
 			//Call queries from accountDAO, SAve
 		    
 //console.log(data.length);
