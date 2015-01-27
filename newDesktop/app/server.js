@@ -21,7 +21,7 @@ var amazonOrderService = require('./server/services/order/amazonOrderService');
 var analyticsEngine = require('./server/analytics/analyticsengine');
 var flipkartOrderService = require('./server/services/order/flipkartOrderService');
 var flipkartProductService = require('./server/services/product/flipkartProductService');
-var orderService = require('./server/services/order/orderService');
+//var orderService = require('./server/services/order/orderService');
 var paytmOrderService = require('./server/services/order/paytmOrderService');
 var paytmProductService = require('./server/services/product/paytmProductService');
 var productService = require('./server/services/product/productService');
@@ -322,8 +322,8 @@ app.post('/product/:id/sell/:channel', function (req, res) {
 //Upload Sheet Code
 app.post('/showSheetUploadForm', function (req, res) {
     //SendForm to browser
-	//accountService.storePaymentSheetData(req,res);
-	accountService.insertAcctgTrans();
+	accountService.storePaymentSheetData(req,res);
+	//accountService.insertAcctgTrans();
 });
 
 app.post('/storePaymentSheetData', function (req, res) {

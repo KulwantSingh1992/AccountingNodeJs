@@ -6,6 +6,8 @@ var fs=require('fs.extra');
 var formidable=require('formidable');
 var csvParser=require('./csvParser');
 var excelParser=require('./excelParser');
+var HasMap=require('hashmap').HashMap;
+var uuid = require('node-uuid');
 
 exports.getAccountingDetails = function(startDate, endDate, cb, err) {
     productDB.getTallyCredentials(invokeAccountingDetails);
@@ -28,6 +30,7 @@ function storePaymentSheetData(req,res) {
 		           			// i.e. file already exists or can't write to directory
 						throw err;
 				} else {
+				    console.log('hanji');
 					csvParser.csvParse('../../../TempUploaded/file.csv',sheetType,res);
 					fs.remove('../../../TempUploaded/file.csv');  //this line should come in each of parsing file .
 			          }
@@ -79,41 +82,205 @@ function insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_t
       accountDB.insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,party_id, role_type_id, gl_account_type_id , gl_account_id, organization_party_id, amount, currency_uom_idT, debit_credit_flag, reconcile_status_id, gl_account_class);
 }
 
-function createPaymentTransactions(orderInfoMap) {
-	var bankAmount = Number(orderInfoMap["invoiceAmount"] - (Number(orderInfoMap["totalMarketPlaceFee"]);
-	var debitCreditFlag;
-	if(bankAmount >= 0) {
-		debitCreditFlag = "D";
-	} else {
-		debitCreditFlag = "C";
-	}				
-	if(data[0]!=''&&data[1]!=''&&data[2]!='') {
-		accountService.createAmazonPaymentSheet(data);
+function createPaymentTransactions(orderMap) {
+	console.log("=======orderMap====="+orderMap);
+	orderMap.forEach(function(orderInfoMap, key) {
+	
+	
+	//get gl account
+	String bankStmGlAccountId = null;
+	String txaccountGlAccountId=null;
+	String cmexpGlAccountId=null;
+	String shpexpGlAccountId=null;
+	String cnexpGlAccountId=null;
+	String bankGlAccountName = null;
+	String accrcblGlAccountName=null;
+	String serviceTaxGlAccountId = null;
+	var rows=accountDB.getGlAccountInfo(orderInfoMap.get("salesRepPartyId"));
+	for(var row : rows) {
+		if(row["glAccountTypeId"] == "BANK_STLMNT_ACCOUNT") {
+			bankStmGlAccountId = row["glAccountId"];
+		}
+		else if(row["glAccountTypeId"]=="TAX_ACCOUNT"){
+		    txaccountGlAccountId=row["glAccountId"];
+		}
+		else if(row["glAccountTypeId"]=="COMISSION_EXPENSE"){
+		    cmexpGlAccountId=row["glAccountId"];
+		}
+		else if(row["glAccountTypeId"]=="ACCOUNT_RECEIVABLE"){
+		   accrcblGlAccountName=row["glAccountId"];
+		}
+		else if(row["glAccountId"]=="CANCELLATION_EXPENSE"){
+		   cnexpGlAccountId=row["glAccountId"];
+		}
+		else if(row["glAccountId"]=="SHIPPING_EXPENSE"){
+		   shpexpGlAccountId=row["glAccountId"];
+		}
 	}
-  	//Get data from GlAccount entity
-  	accountService.insertAcctgTrans("ACTG_001","PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",orderInfoMap["settlementRefNo"], 			orderInfoMap["settlementDate"], orderInfoMap["externalOrderId"],null, null);
-	//1st entry
-	accountService.insertAcctgTransEntry("ACTG_001","ACTG_ENTRY_001","_NA_",data[1],null,null,"BANK_STLMNT_ACCOUNT",
-		"BANK_001","PAXCOM",bankAmount,"INR", debitCreditFlag, "AES_NOT_RECONCILED", "ASSET");
-	//2nd entry
-	if(orderInfoMap["serviceTax"] != null) {
-		accountService.insertAcctgTransEntry("ACTG_002", "ACTG_ENTRY_002", "_NA_",data[1],null,"SERVICE_TAX_AUTH",
-		"TAX_ACCOUNT", "BANK_001","PAXCOM",Number(orderInfoMap["serviceTax"]),"INR", "D", "AES_NOT_RECONCILED", "ASSET");
-	}
-	//3rd entry
-	if(orderInfoMap["cancellationFee"] != null){
-		accountService.insertAcctgTransEntry("ACTG_003", "ACTG_ENTRY_003", "_NA_",data[1],null,"CNCL_AGENT",
-		"CANCELLATION_EXPENSE", "BANK_001","PAXCOM",Number(orderInfoMap["cancellationFee"]),"INR", "D", "AES_NOT_RECONCILED", "ASSET");
-	}
-	if(orderInfoMap["shippingCharges"] != null) {
-		accountService.insertAcctgTransEntry("ACTG_004", "ACTG_ENTRY_004", "_NA_",data[1],"carrierPartyId","CARRIER", 				"SHIPPING_EXPENSE", "BANK_001","PAXCOM",Number(orderInfoMap["shippingCharges"),"INR", "D", "AES_NOT_RECONCILED", 				"ASSET");
-	}
-	if(orderInfoMap["commissionFee"] != null){
-		accountService.insertAcctgTransEntry("ACTG_005", "ACTG_ENTRY_005", "_NA_",data[1],null,"COMSN_AGENT",
-		"COMMISSION_EXPENSE", "BANK_001","PAXCOM",Number(orderInfoMap["commissionFee"]),"INR", "D", "AES_NOT_RECONCILED", "ASSET");
-	}
+	
+	//
+	var orderStatus=orderInfoMap.get("orderStatus").toString();
+	console.log("======orderStatus======"+orderStatus);
+	if(((orderStatus.indexOf("delivered") != -1) || (orderStatus.indexOf("shipped") != -1) || (orderStatus.indexOf("confirmed")!=-1) || 
+	   (orderStatus.indexOf("dispute_resolved")!=-1) || (orderStatus.indexOf("Shipping Services")!=-1) || (orderStatus.indexOf("Order")!=-1)) && Number(orderInfoMap.get("totalMarketPlaceFee")) > 0) {
+		var bankAmount = Number(orderInfoMap.get("invoiceAmount")) - Number(orderInfoMap.get("totalMarketPlaceFee"));
+		var debitCreditFlag;
+		if(bankAmount >= 0) {
+			debitCreditFlag = "D";
+		} else {
+			debitCreditFlag = "C";
+		}				
+		//Get data from GlAccount entity
+		  var acctg_trans_id = uuid.v4();
+		  insertAcctgTrans(acctg_trans_id,"PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",orderInfoMap.get("settlementRefNo"),
+			 orderInfoMap.get("settlementDate"), orderInfoMap.get("externalOrderId"),null, null);
+		//1st entry
+			var acctg_trans_entry_id = uuid.v4();
+			insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_id,"_NA_",orderInfoMap.get("settlementDate"),null,null,
+			"BANK_STLMNT_ACCOUNT",bankStmGlAccountId,"PAXCOM",bankAmount,"INR", debitCreditFlag, "AES_NOT_RECONCILED", "ASSET");
+		//2nd entry
+		if(orderInfoMap.get("serviceTax") != null) {
+			acctg_trans_entry_id = uuid.v4();
+			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"),null,"SERVICE_TAX_AUTH",
+			"TAX_ACCOUNT", txaccountGlAccountId,"PAXCOM",Number(orderInfoMap.get("serviceTax")),"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+		}
+		//3rd entry
+		if(orderInfoMap.get("cancellationFee") != null){
+			acctg_trans_entry_id = uuid.v4();
+			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"),null,"CNCL_AGENT",
+			"CANCELLATION_EXPENSE", cnexpGlAccountId,"PAXCOM",Number(orderInfoMap.get("cancellationFee")),"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+		}
+		//4rth entry
+		if(orderInfoMap.get("shippingCharges") != null) {
+			acctg_trans_entry_id = uuid.v4();
+			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"),"carrierPartyId","CARRIER",
+			 "SHIPPING_EXPENSE", shpexpGlAccountId,"PAXCOM",Number(orderInfoMap.get("shippingCharges")),"INR", "D", "AES_NOT_RECONCILED", 				"ASSET");
+		}
+		//5th entry
+		if(orderInfoMap.get("commissionFee") != null){
+			acctg_trans_entry_id = uuid.v4();
+			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"),null,"COMSN_AGENT",
+			"COMMISSION_EXPENSE", cmexpGlAccountId,"PAXCOM",Number(orderInfoMap.get("commissionFee")),
+			"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+		}
+		
+		//6th entry
+		// if(orderInfoMap["commissionFee"] != null){
+			// acctg_trans_entry_id = uuid.v4();
+			// insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"), 
+			// orderInfoMap.get("salesRepPartyId"),"SALES_REP", "ACCOUNTS_RECEIVABLE", "BANK_001","PAXCOM",
+			// Number(orderInfoMap.get("invoiceAmount")),"INR", "C", "AES_NOT_RECONCILED", "ASSET");
+		// }
+		
+		//2nd Transaction
+		acctg_trans_id = uuid.v4();
+		insertAcctgTrans(acctg_trans_id,"PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",orderInfoMap["settlementRefNo"],
+		orderInfoMap["settlementDate"], orderInfoMap["externalOrderId"],null, null, "BILL_TO_CUSTOMER");
+		//1st entry
+		acctg_trans_entry_id = uuid.v4();
+		insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"), orderInfoMap
+			.get("salesRepPartyId"),"SALES_REP", "ACCOUNTS_RECEIVABLE", accrcblGlAccountName,"PAXCOM",Number(orderInfoMap.get("invoiceAmount")),"INR", 
+			"D", "AES_NOT_RECONCILED", "ASSET");
+		//2nd entry
+		acctg_trans_entry_id = uuid.v4();
+		insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"), "custPartyId",
+			"CUSTOMER",    "ACCOUNTS_RECEIVABLE", accrcblGlAccountName,"PAXCOM",Number(orderInfoMap.get("invoiceAmount")),"INR", "C", "AES_NOT_RECONCILED",    "ASSET");
+		   //Add code to settle/unsettle transactions(Currently all are posted)
+	} else if(orderStatus.indexOf( "cancelled")!=-1  && Number(orderInfoMap.get("totalMarketPlaceFee")) > 0) {
+		//Get data from GlAccount entity
+		//1st Transaction
+		acctg_trans_id = uuid.v4();
+		acctg_trans_entry_id = uuid.v4();
+		insertAcctgTrans(acctg_trans_id ,"PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",orderInfoMap.get("settlementRefNo"), 
+			orderInfoMap.get("settlementDate"), orderInfoMap.get("externalOrderId"),null, null, "BILL_TO_CUSTOMER");
+		 //1st entry
+		insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_id,"_NA_",null,null,"BANK_STLMNT_ACCOUNT",
+		   bankStmGlAccountId,"PAXCOM",bankAmount,"INR", "C", "AES_NOT_RECONCILED", "ASSET");
+		  //2nd entry
+		  if(orderInfoMap.get("serviceTax") != null) {
+		  acctg_trans_entry_id = uuid.v4();
+		
+		   insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",null,"SERVICE_TAX_AUTH",
+		   "TAX_ACCOUNT", txaccountGlAccountId,"PAXCOM",Number(orderInfoMap.get("serviceTax")),"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+		  }
+		  //3rd entry
+		  if(orderInfoMap.get("commissionFee") != null){
+		   acctg_trans_entry_id = uuid.v4();
+		
+		   insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",null,"COMSN_AGENT",
+		   "COMMISSION_EXPENSE", cmexpGlAccountId,"PAXCOM",Number(orderInfoMap.get("commissionFee")),"INR", "D", "AES_NOT_RECONCILED",     "ASSET");
+		  }
+		  //4rth entry
+		  if(orderInfoMap.get("cancellationFee") != null){
+		  acctg_trans_entry_id = uuid.v4();
+		  insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",null,"CNCL_AGENT",
+		   "CANCELLATION_EXPENSE", cnexpGlAccountId,"PAXCOM",Number(orderInfoMap.get("cancellationFee")),"INR", "D", "AES_NOT_RECONCILED",     "ASSET");
+		  }
+	 } else if(orderStatus.indexOf( "Refund")!=-1) {
+	  //Get returnId
+	  //1st Transaction
+	  acctg_trans_id = uuid.v4();
+		acctg_trans_entry_id = uuid.v4();
+		
+		insertAcctgTrans(acctg_trans_id,acctg_trans_entry_id,"Payment", Date.now(),"Y",orderInfoMap.get("settlementRefNo"), 
+			orderInfoMap.get("settlementDate"), orderInfoMap.get("externalOrderId"),null, null, "BILL_TO_CUSTOMER");
+	  //1st entry
+	  acctg_trans_entry_id = uuid.v4();
+		
+	  insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_id, "_NA_", orderInfoMap.get("salesRepPartyId"),
+	  "SALES_REP", "ACCOUNTS_RECEIVABLE", accrcblGlAccountName,"PAXCOM",Number(orderInfoMap.get("invoiceAmount")),"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+	  //2nd entry
+	  acctg_trans_entry_id = uuid.v4();
+		
+	  insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_id,"_NA_",null,null,"BANK_STLMNT_ACCOUNT",
+	   bankStmGlAccountId,"PAXCOM",bankAmount,"INR", "C", "AES_NOT_RECONCILED", "ASSET");
+	  //3rd entry
+	  acctg_trans_entry_id = uuid.v4();
+		
+	  if(orderInfoMap.get("serviceTax") != null) {
+	   insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",null,"SERVICE_TAX_AUTH",
+	   "TAX_ACCOUNT", txaccountGlAccountId,"PAXCOM",Number(orderInfoMap.get("serviceTax")),"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+	  }
+	  //4rth entry
+	  acctg_trans_entry_id = uuid.v4();
+		
+	  if(orderInfoMap.get("shippingCharges") != null) {
+	   insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",
+			"carrierPartyId","CARRIER",     "SHIPPING_EXPENSE", shpexpGlAccountId,"PAXCOM",Number(orderInfoMap.get("shippingCharges")),
+			  "INR", "D", "AES_NOT_RECONCILED",     "ASSET");
+	  }
+	  //5th entry
+	    acctg_trans_entry_id = uuid.v4();
+	
+	  if(orderInfoMap.get("commissionFee") != null){
+	   insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_id , "_NA_",null,"COMSN_AGENT",
+	   "COMMISSION_EXPENSE", cmexpGlAccountId,"PAXCOM",Number(orderInfoMap.get("commissionFee")),"INR", "D", "AES_NOT_RECONCILED",     "ASSET");
+	  }
+	  //2nd Transaction
+	   acctg_trans_id = uuid.v4();
+		acctg_trans_entry_id = uuid.v4();
+	
+	  insertAcctgTrans(acctg_trans_id,acctg_trans_entry_id,"Payment", Date.now(),"Y",
+		orderInfoMap.get("settlementRefNo"),    orderInfoMap.get("settlementDate"), orderInfoMap.get("externalOrderId"),null, null,
+		"BILL_TO_CUSTOMER");
+	  //1st entry
+	  acctg_trans_entry_id = uuid.v4();
+	
+	  insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_", "custPartyId","CUSTOMER",
+		"ACCOUNTS_RECEIVABLE", accrcblGlAccountName,"PAXCOM",Number(orderInfoMap.get("invoiceAmount")),"INR", "D", "AES_NOT_RECONCILED",    "ASSET");
+	  //2nd entry
+	  acctg_trans_entry_id = uuid.v4();
+	
+	  insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementRefNo"), orderInfoMap.get("salesRepPartyId")
+		,"SALES_REP", "ACCOUNTS_RECEIVABLE", accrcblGlAccountName,"PAXCOM",Number(orderInfoMap.get("invoiceAmount")),
+		 "INR", "C", "AES_NOT_RECONCILED", "ASSET");
+	 }
+	 //Put transactionId in OrderHeader
+	 //Mark transactions settle/unsettle
+	});
 }
 exports.storePaymentSheetData=storePaymentSheetData;
 exports.createAmazonPaymentSheet=createAmazonPaymentSheet;
 exports.createFlipkartPaymentSheet=createFlipkartPaymentSheet;
 exports.insertAcctgTrans=insertAcctgTrans;
+exports.createPaymentTransactions=createPaymentTransactions;

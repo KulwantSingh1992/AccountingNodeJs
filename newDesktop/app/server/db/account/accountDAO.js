@@ -3,14 +3,15 @@ var dbconfig=require('./../db-config');
 db=dbconfig.db;
 var insertPaymentSummaryQuery = "INSERT OR REPLACE INTO payment_sheet_summary(settlement_ref_id, order_id, external_id, settlement_date, order_item_id, order_status, sku, description, quantity, invoice_id, marketPlace, order_city, order_state, order_postal, invoice_amount,  shipping_credits, promotional_rebate, sales_tax, selling_fee, fba_fee, other_transaction_fee, other, total, settlement_value, order_item_value, refund, hold, performance_award, protection_fund, total_marketplace_fee, comission_rate, commission_fee, fixed_fee, emi_fee, shipping_fee, reverse_shipping_fee, cancellation_fee, fee_discount, service_tax, dispatch_date, delivery_date, cancellation_date, dispute_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-var insertAcctgTransQuery = "INSERT INTO acctg_trans(acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,voucher_ref,voucher_date,order_id, inventory_item_id, party_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
+var insertAcctgTransQuery = "INSERT OR REPLACE INTO acctg_trans(acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,voucher_ref,voucher_date,order_id, inventory_item_id, party_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
-var insertAcctgTransEntryQuery = "INSERT OR REPLACE INTO acctg_trans_entry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id, voucher_ref, party_id, role_type_id, gl_account_type_id, gl_account_id,organization_party_id,amount,currency_uom_id,debit_credit_flag,reconcile_status_id,gl_account_class) VALUES (?,?,?,?,?,?,?,?)";
+var insertAcctgTransEntryQuery = "INSERT OR REPLACE INTO acctg_trans_entry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,  party_id, role_type_id, gl_account_type_id, gl_account_id,organization_party_id,amount,currency_uom_id,debit_credit_flag,reconcile_status_id,gl_account_class) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 var refExistsCount = "select * from payment_sheet_summary where settlement_ref_id = ?  and order_status = ? ";
 
 var getDataFromPaymentSummary="select * from payment_sheet_summary";
 
+var glaccountinfo = "select * from gl_account_organization_and_class where organization_party_id = ?  ";
 
 var importAmazonPaymentSheet = exports.importAmazonPaymentSheet = function (record) {
     db.beginTransaction(function (err, transaction) {
@@ -41,6 +42,12 @@ var importFlipkartPaymentSheet = exports.importFlipkartPaymentSheet = function (
 
 }
 
+function getGlAccountInfo(organization_party_id){
+
+db.all(glaccountinfo,organization_party_id,function(err,rows){return rows;};
+
+}
+
 
 function refAlreadyExistsAmazon(data,fun){
 
@@ -60,9 +67,11 @@ db.all(refExistsCount,data[0],data[5],function(err,rows){if(rows.length==0)fun(0
 
 }
 
-function insertAcctgTrans(acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,  voucher_ref, voucher_date, order_id, inventory_item_id, party_id){
+function insertAcctgTrans(acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,
+       voucher_ref, voucher_date, order_id, inventory_item_id, party_id){
 db.beginTransaction(function (err, transaction) {
-	transaction.run(insertAcctgTransQuery, acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,  				voucher_ref,voucher_date, order_id, inventory_item_id, party_id);
+	transaction.run(insertAcctgTransQuery, acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,
+    	voucher_ref,voucher_date, order_id, inventory_item_id, party_id);
 		transaction.commit(function (err) {
 		    if (err) {
 			console.error(err);
@@ -70,21 +79,29 @@ db.beginTransaction(function (err, transaction) {
 		    }
 		});
 	});
-
-function insertAcctgTransEntry(){
-//change kall leyo ehde vich
-
-db.beginTransaction(function (err, transaction) {
-	transaction.run(insertAcctgTransEntryQuery,acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,party_id, role_type_id, 			gl_account_type_id , gl_account_id, organization_party_id, amount, currency_uom_idT, debit_credit_flag, reconcile_status_id, 			gl_account_class);
+}
+function insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_seq_id,acctg_trans_entry_type_id
+    ,party_id,role_type_id,gl_account_type_id,gl_account_id,organization_party_id,amount,
+	currency_uom_id,debit_credit_flag,reconcile_status_id,gl_account_class){
+	
+	db.beginTransaction(function (err, transaction) {
+	transaction.run(insertAcctgTransEntryQuery, acctg_trans_id,acctg_trans_entry_seq_id,acctg_trans_entry_type_id,
+        party_id,role_type_id,gl_account_type_id,gl_account_id,organization_party_id,amount,currency_uom_id,debit_credit_flag
+		,reconcile_status_id,gl_account_class);
 		transaction.commit(function (err) {
 		    if (err) {
-		        console.error(err);
-		        transaction.rollback();
+			console.error(err);
+			transaction.rollback();
 		    }
 		});
-    });
+	});
+	
 
+
+//change kall leyo ehde vich
+}
 
 exports.refAlreadyExistsAmazon=refAlreadyExistsAmazon;
 exports.refAlreadyExistsFlipkart=refAlreadyExistsFlipkart;
 exports.insertAcctgTrans=insertAcctgTrans;
+exports.insertAcctgTransEntry=insertAcctgTransEntry;
