@@ -23,7 +23,60 @@ function csvParse(file, sheetType,res){
 			count++;}
 			else //console.log(data);
 			{
-			  if(validated)	{		
+			  if(validated)	{
+				var orderInfo = {};
+				var refundedPayment = false;	
+				var productInfoMap = {};
+				if(data[2] == "Refund") {
+					refundedPayment = "true";
+					//Create OrderPaymentPreference and Payment
+				}
+				if(data[4] != "") {
+					productInfoMap[data[4]]=  data[6];
+				}
+				if(orderInfo.get(data[3]) != null) {
+					var tempMap = orderInfo[data[2]];
+					orderMap["productIdInfo"] = productInfoMap;
+					orderMap["settlementRefNo"] = data[1];
+					orderMap["settlementDate"] = data[0];
+					orderMap["commissionFee"] = Number(data[16]) + Number(data[18]) + Number(tempMap["commissionFee"]);
+					orderMap["invoiceAmount"] = Number(data[12]) + Number(tempMap["invoiceAmount"]);
+					orderMap["salesTax"] = Number(data[13]) + Number(tempMap["salesTax"]);
+					orderMap["externalOrderId"] = data[3];
+					orderMap["shippingCharges"] = Number(data[13]) + Number(tempMap["shippingCharges"]);
+					orderMap["promotionalRebate"] = Number(data[14]) + Number(tempMap["promotionalRebate"]);
+					orderMap["fbaFee"] = Number(data[17]) + Number(tempMap["fbaFee"]);
+					orderMap["orderStatus"] = data[2];
+					orderMap["otherTransactionFee"] = Number(data[18]) + NUmber(tempMap["otherTransactionFee"]);
+					orderMap["invoiceId"] = "INV11";
+					var totalMarketplaceFee = Number(data[16]) + Number(data[18]) + Number(data[13]);
+					orderMap["totalMarketPlaceFee"] = totalMarketplaceFee + Number(tempMap["totalMarketPlaceFee"]);
+					orderMap["refundedPayment"] = refundedPayment;
+					orderInfo[data[3]] = orderMap;
+				} else {
+					var orderMap = {};
+					if(UtilValidate.isNotEmpty(sku)){
+						productIdInfo.put(sku,quantity);
+					}
+					orderMap["productIdInfo"] = productInfoMap;
+					orderMap["settlementRefNo"] = data[1];
+					orderMap["settlementDate"] = data[0];
+					orderMap["commissionFee"] = Number(data[16]) + Number(data[18]);
+					orderMap["invoiceAmount"] = data[12];
+					orderMap["salesTax"] = data[13];
+					orderMap["externalOrderId"] = data[3];
+					orderMap["shippingCharges"] = data[13];
+					orderMap["promotionalRebate"] = data[14];
+					orderMap["fbaFee"] = data[17];
+					orderMap["orderStatus"] = data[2];
+					orderMap["otherTransactionFee"] = data[18];
+					orderMap["invoiceId"] = "INV11";
+					var totalMarketplaceFee = Number(data[16]) + Number(data[18]) + Number(data[13]);
+					orderMap["totalMarketPlaceFee"] = totalMarketplaceFee;
+					orderMap["refundedPayment"] = refundedPayment;
+					orderInfo[data[3]] = orderMap;
+				}
+				createPaymentTransactions(orderInfo);
 				var bankAmount = Number(data[12]) - (Number(data[16]) + Number(data[18]) + Number(data[19])) + Number(data[15]);
 				var debitCreditFlag;
 				if(bankAmount >= 0) {
@@ -33,19 +86,37 @@ function csvParse(file, sheetType,res){
 				}				
 				if(data[0]!=''&&data[1]!=''&&data[2]!='')
 			  	accountService.createAmazonPaymentSheet(data);
+				
 			  	//Get data from GlAccount entity
 			  	accountService.insertAcctgTrans("ACTG_001","PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",data[1],data[0],
-				,null,null, null);
+				,data[3],null, null);
+								
 				//1st entry
-				accountService.insertAcctgTransEntry("ACTG_001","ACTG_ENTRY_001","_NA_",null,null,"BANK_STLMNT_ACCOUNT", 						"BANK_001","PAXCOM",data[12],"INR", bankAmount, debitCreditFlag, "AES_NOT_RECONCILED", "ASSET");
+					accountService.insertAcctgTransEntry("ACTG_001","ACTG_ENTRY_001","_NA_",data[1],null,null,"BANK_STLMNT_ACCOUNT",
+      				"BANK_001","PAXCOM",bankAmount,"INR", debitCreditFlag, "AES_NOT_RECONCILED", "ASSET");
 				//2nd entry
-				if(Number(data[15]) >0) {
-				accountService.insertAcctgTransEntry"ACTG_00", "ACTG_ENTRY_002", "_NA_",null,null, "BANK_STLMNT_ACCOUNT", 						"BANK_001","PAXCOM",data[12],"INR", bankAmount, debitCreditFlag, "AES_NOT_RECONCILED", "ASSET");
+				if(Number(data[16]) >0) {
+				accountService.insertAcctgTransEntry("ACTG_002", "ACTG_ENTRY_002", "_NA_",data[1],null,"SERVICE_TAX_AUTH", "TAX_ACCOUNT",
+				   "BANK_001","PAXCOM",bankAmount,"INR", "D", "AES_NOT_RECONCILED", "ASSET");
 				}
 				//3rd entry
-				if(Number(data[13]) > 0) {
-				accountService.insertAcctgTransEntry"ACTG_001", "ACTG_ENTRY_003", "_NA_",null,"CARRIER", "SHIPPING_EXPENSE", 					"BANK_001","PAXCOM",data[13],"INR", bankAmount, "D", "AES_NOT_RECONCILED", "ASSET");
+				if(Number(data[])>0){
+				accountService.insertAcctgTransEntry("ACTG_003", "ACTG_ENTRY_003", "_NA_",data[1],null,"CNCL_AGENT", "CANCELLATION_EXPENSE", 
+				  "BANK_001","PAXCOM",bankAmount,"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+					
 				}
+				
+				if(Number(data[14]) > 0) {
+				accountService.insertAcctgTransEntry("ACTG_004", "ACTG_ENTRY_004", "_NA_",data[1],"carrierPartyId","CARRIER", "SHIPPING_EXPENSE", 
+				  "BANK_001","PAXCOM",bankAmount,"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+				}
+				
+				if(Number(data[])>0){
+				accountService.insertAcctgTransEntry("ACTG_005", "ACTG_ENTRY_005", "_NA_",data[1],null,"COMSN_AGENT", "COMMISSION_EXPENSE", 
+				  "BANK_001","PAXCOM",bankAmount,"INR", "D", "AES_NOT_RECONCILED", "ASSET");
+				
+				}
+				
 			 }
 			  else ;//reponse for if one of entity is not present;
 			  
