@@ -4,6 +4,7 @@ var csv = require("fast-csv");
 var accountService=require('./accountService');
 var fs=require('fs.extra');
 var HashMap=require('hashmap').HashMap;
+var response;
 
 function csvParse(file, sheetType,res){
 	var stream = fs.createReadStream(file);
@@ -20,13 +21,13 @@ function csvParse(file, sheetType,res){
 			if(count==7){
 			if(data.length==21)
 			{ 
-			if(false&&!sequenceCheck(data,sheetType)){resss(res,'csv sheet seqence problem');count++;return;}
-			else {validated=true;resss(res,'all done');}
+			if(!sequenceCheck(data,sheetType)){resss(res,'csv sheet seqence problem');count++;return;}
+			else {validated=true;resss(res,"all done");}
 			}
 			else {resss(res,'csv sheet row count not correct');count++;return;}
 			}
-			
-			count++;}
+			count++;
+			}
 			else //console.log(data);
 			{
 			  if(validated)	{
@@ -113,11 +114,18 @@ function csvParse(file, sheetType,res){
 			 //queries.queryInsert(db,data,'csv');
             if(count==0){
 			//console.log(data);
-			if(data.length==39){ if(false&&!sequenceCheck(data,sheetType)){resss(res,'csv sheetseqence problem not correct');count++;return;}
-			else {validated=true;resss(res,'all done');}
+			if(data.length==39){ if(!sequenceCheck(data,sheetType)){resss(res,'csv sheetseqence problem not correct');count++;return;}
+			else {validated=true;
+			resss(res,"all done");
 			}
-			else {resss(res,'csv sheet row count not correct');return;}
-			count++;}
+			}
+			else {
+			    resss(res,'csv sheet row count not correct');
+				count++;
+				return;
+				}
+			count++;
+			}
 			else {
 				if(validated){	
 					if(data[0]!=''&&data[4]!=''&&data[5]!=''){
@@ -145,6 +153,7 @@ function csvParse(file, sheetType,res){
                orderInfoMap.set("cancellationFee", data[29]);
                orderInfoMap.set("invoiceId", data[8]);
                orderInfoMap.set("externalOrderId", data[2]);
+			   orderInfoMap.set("totalMarketPlaceFee" , data[17]);
 			   orderInfoMap.set("salesRepPartyId", "FLIPKART");
                orderInfo.set(data[2], orderInfoMap);
 				} 
@@ -162,10 +171,11 @@ function csvParse(file, sheetType,res){
 	stream.pipe(csvStream); // Need to be tested if required
 }
 
-function resss(res,code){
-	res.writeHead(200, {'content-type': 'text/plain'});
+function resss(res,code)
+{
+	res.writeHead(200, {'content-type': 'text/html'});
 	res.write(code);
-	res.end('kulwanignh');
+	res.end();
 }
 
 function sequenceCheck(data,sheetType){

@@ -15,9 +15,13 @@ var getDataFromPaymentSummary="select * from payment_sheet_summary";
 
 var glaccountinfo = "select * from gl_account_organisation_and_class where organisation_party_id = ?";
 
+var acctTransViewQuery="select * from acctg_trans";
+
+var acctgTransEntryViewQuery="select * from acctg_trans_entry";
+
 var importAmazonPaymentSheet = exports.importAmazonPaymentSheet = function (record) {
     db.beginTransaction(function (err, transaction) {
-	transaction.run(insertPaymentSummaryQuery, [record[1], null,record[3], record[0], null, record[2], record[4], record[5], 			record[6],null,record[7], record[9],record[10],record[11],record[12], record[13], record[14],record[15],record[16],
+	transaction.run(insertPaymentSummaryQuery, [record[1], null,record[3], record[0], null, record[2], record[4], record[5],record[6],null,record[7], record[9],record[10],record[11],record[12], record[13], record[14],record[15],record[16],
 		record[17],record[18],record[19],record[20]]);
         transaction.commit(function (err) {
             if (err) {
@@ -33,7 +37,7 @@ var importFlipkartPaymentSheet = exports.importFlipkartPaymentSheet = function (
     db.beginTransaction(function (err, transaction) {
 	transaction.run(insertPaymentSummaryQuery, [record[0], null,record[2], record[1], record[3], record[5], record[6],null, 		record[7],record[8],null,null,null,null,record[10],null,null,null,null,null,null,null,null, record[11],null,record[13],
 		record[14],record[15],record[16],record[17],record[18],record[19],record[20],record[21],record[22],record[26],record[27],
-		record[28],record[29],record[30],record[31],record[32],record[33],record[34]]);
+		record[28],record[29],record[30],record[31],record[32],record[33]]);
         transaction.commit(function (err) {
             if (err) {
                 console.error(err);
@@ -97,17 +101,43 @@ function insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_seq_id,acctg_tra
 		    }
 		});
 	});
-	
-
-
-//change kall leyo ehde vich
+	//change kall leyo ehde vich
 }
 
-function insertingGlAccountOrganisationAndClass(){
+function acctTransView(view,fun){
 
+db.all(acctTransViewQuery,function(err,rows){
+                              
+                               for(var i=0;i<rows.length;i++)
+							   {
+							 
+							   view+='<tr>';
+								  view+='<td>'+rows[i]["acctg_trans_id"]+'</td>'
+								  view+='<td>'+rows[i]["acctg_trans_type_id"]+'</td>'
+								  view+='<td>'+rows[i]["description"]+'</td>'
+								  view+='<td>'+rows[i]["transaction_date"]+'</td>'
+								  view+='<td>'+rows[i]["voucher_ref"]+'</td>'
+								  view+='<td>'+rows[i]["voucher_date"]+'</td>'
+								  view+='<td>'+rows[i]["order_id"]+'</td>'
+								  view+='</tr>';
+								 
+							  }
+								
+							  view+="</table>";
+							  fun(view);
+                             });
 
 }
 
+function acctTransEntryView(){
+
+db.all(acctgTransEntryViewQuery,function(err,rows){
+
+
+               });
+}
+
+exports.acctTransView=acctTransView;
 exports.refAlreadyExistsAmazon=refAlreadyExistsAmazon;
 exports.refAlreadyExistsFlipkart=refAlreadyExistsFlipkart;
 exports.getGlAccountInfo=getGlAccountInfo;

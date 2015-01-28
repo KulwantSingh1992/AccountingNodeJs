@@ -14,8 +14,7 @@ exports.getAccountingDetails = function(startDate, endDate, cb, err) {
     function invokeAccountingDetails(cred){
         console.log(cred);
         if(cred.URL) tallyService.getAccountingDetails(cred, startDate, endDate, cb, err);
-    }
-};
+    }};
 //Export Upload File code
 function storePaymentSheetData(req,res) {
       var sheetType;
@@ -32,6 +31,7 @@ function storePaymentSheetData(req,res) {
 				} else {
 				    console.log('hanji');
 					csvParser.csvParse(__dirname+'/TempUploaded/file.csv',sheetType,res);
+					response=res;
 					fs.remove(__dirname+'/TempUploaded/file.csv');  //this line should come in each of parsing file .
 			          }
 	  
@@ -43,10 +43,11 @@ function storePaymentSheetData(req,res) {
 				    // i.e. file already exists or can't write to directory
 				        throw err;
 				} else {
-					        excelParser.excelParse(__dirname+'/TempUploaded/file.xlsx',sheetType,res);
+             				excelParser.excelParse(__dirname+'/TempUploaded/file.xlsx',sheetType,res);
+							response=res;
                  			fs.remove(__dirname+'/TempUploaded/file.xlsx'); //this line should come in each of parsing file .
                    		}
-			 });
+			      });
 		}
 	});
 
@@ -74,13 +75,6 @@ function createAmazonPaymentSheet(data) {
 		    
 }
 
-function insertAcctgTrans(acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,  voucher_ref, voucher_date, order_id, 	inventory_item_id, party_id){
-      accountDB.insertAcctgTrans(acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,  voucher_ref, voucher_date, order_id, inventory_item_id, party_id);
-}
-
-function insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,party_id, role_type_id, gl_account_type_id , gl_account_id, organization_party_id, amount, currency_uom_idT, debit_credit_flag, reconcile_status_id, gl_account_class){
-      accountDB.insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,party_id, role_type_id, gl_account_type_id , gl_account_id, organization_party_id, amount, currency_uom_idT, debit_credit_flag, reconcile_status_id, gl_account_class);
-}
 var bankStmGlAccountId = "12345";
 	var txaccountGlAccountId=null;
 	var cmexpGlAccountId=null;
@@ -160,6 +154,14 @@ function createPaymentTransactions(orderMap) {
 	// //
 	
 });}
+
+function insertAcctgTrans(acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,  voucher_ref, voucher_date, order_id,  inventory_item_id, party_id){
+      accountDB.insertAcctgTrans(acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,  voucher_ref, voucher_date, order_id, inventory_item_id, party_id);
+}
+
+function insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,party_id, role_type_id, gl_account_type_id , gl_account_id, organization_party_id, amount, currency_uom_idT, debit_credit_flag, reconcile_status_id, gl_account_class){
+      accountDB.insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,party_id, role_type_id, gl_account_type_id , gl_account_id, organization_party_id, amount, currency_uom_idT, debit_credit_flag, reconcile_status_id, gl_account_class);
+}
 
 function mainfunction(orderInfoMap){
 var orderStatus=orderInfoMap.get("orderStatus");
@@ -266,7 +268,7 @@ var orderStatus=orderInfoMap.get("orderStatus");
 	  acctg_trans_id = uuid.v4();
 		acctg_trans_entry_id = uuid.v4();
 		
-		insertAcctgTrans(acctg_trans_id,acctg_trans_entry_id,"Payment", Date.now(),"Y",orderInfoMap.get("settlementRefNo"), 
+		insertAcctgTrans(acctg_trans_id,"PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",orderInfoMap.get("settlementRefNo"), 
 			orderInfoMap.get("settlementDate"), orderInfoMap.get("externalOrderId"),null, null, "BILL_TO_CUSTOMER");
 	  //1st entry
 	  acctg_trans_entry_id = uuid.v4();
@@ -304,7 +306,7 @@ var orderStatus=orderInfoMap.get("orderStatus");
 	   acctg_trans_id = uuid.v4();
 		acctg_trans_entry_id = uuid.v4();
 	
-	  insertAcctgTrans(acctg_trans_id,acctg_trans_entry_id,"Payment", Date.now(),"Y",
+	  insertAcctgTrans(acctg_trans_id,"PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",
 		orderInfoMap.get("settlementRefNo"),  orderInfoMap.get("settlementDate"), orderInfoMap.get("externalOrderId"),null, null,
 		"BILL_TO_CUSTOMER");
 	  //1st entry
@@ -321,11 +323,22 @@ var orderStatus=orderInfoMap.get("orderStatus");
 	 }
 	 //Put transactionId in OrderHeader
 	 //Mark transactions settle/unsettle
+	 
+	}
+	
+	function tableViewResponse(res){
+	  var view;
+	  view="<table border='1'><th>AcctgTransId</th><th>AcctgTransTypeId</th><th>Description</th><th>Transaction Date</th><th>Voucher Ref Id</th><th>Voucher Ref Date</th><th>OrderId</th>";
+	  accountDB.acctTransView(view,function(views){
+	  res.writeHead(200, {'content-type': 'text/html'});
+	  res.write(views);
+	  res.end();});
+	  
+	
 	}
 
-
+exports.tableViewResponse=tableViewResponse;
 exports.storePaymentSheetData=storePaymentSheetData;
 exports.createAmazonPaymentSheet=createAmazonPaymentSheet;
 exports.createFlipkartPaymentSheet=createFlipkartPaymentSheet;
-exports.insertAcctgTrans=insertAcctgTrans;
 exports.createPaymentTransactions=createPaymentTransactions;

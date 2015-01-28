@@ -326,10 +326,10 @@ app.post('/showSheetUploadForm', function (req, res) {
 	//accountService.insertAcctgTrans();
 });
 
-app.post('/storePaymentSheetData', function (req, res) {
+app.get('/viewData', function (req, res) {
     //use Formidable to parse
     //Get Format
-    accountService.storePaymentSheetData(filePath, format, res);
+    accountService.tableViewResponse(res);
 });
 
 

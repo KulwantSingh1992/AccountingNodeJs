@@ -33,6 +33,10 @@
                     <a ng-click="wForm.index=7;">
                         <img src="../images/User.png" alt="" style="width:42px;height:42px;border:0">Import Sheet</a>
                 </li>
+				<li ng-class="wForm.index==8?'active':''">
+                    <a ng-click="wForm.index=8;">
+                        <img src="../images/User.png" alt="" style="width:42px;height:42px;border:0">View Sheet</a>
+                </li>
             </ul>
         </div> 
 
@@ -45,6 +49,7 @@
             <div ng-if="wForm.index==5" id="tally-setting" ng-include="'views/setting/tally-setting-form.html'"></div>
             <div ng-if="wForm.index==6" id="other-setting" ng-include="'views/setting/other-setting-form.html'"></div>
             <div ng-if="wForm.index==7" id="import-sheet" ng-include="'views/setting/import-sheet.html'"></div>
+            <div ng-if="wForm.index==8" id="view-sheet" ng-include="'views/setting/view-sheet.html'"></div>
             
             <ul class="pager">
                 <li ng-if="wForm.index!=1" ng-click="wForm.index=wForm.index-1;"><a href="javascript:;">Previous</a></li>
