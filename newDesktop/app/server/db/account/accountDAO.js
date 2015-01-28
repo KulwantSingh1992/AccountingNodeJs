@@ -7,14 +7,13 @@ var insertAcctgTransQuery = "INSERT OR REPLACE INTO acctg_trans(acctg_trans_id, 
 
 var insertAcctgTransEntryQuery = "INSERT OR REPLACE INTO acctg_trans_entry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,  party_id, role_type_id, gl_account_type_id, gl_account_id,organization_party_id,amount,currency_uom_id,debit_credit_flag,reconcile_status_id,gl_account_class) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-var insertGlAccountOrganizationAndClassQuery = "INSERT OR REPLACE INTO gl_account_organization_and_class(gl_account_id,organisation_party_id,role_type_id,gl_account_type_id,gl_account_class,account_name) VALUES (?,?,?,?,?,?);"
 
 
 var refExistsCount = "select * from payment_sheet_summary where settlement_ref_id = ?  and order_status = ? ";
 
 var getDataFromPaymentSummary="select * from payment_sheet_summary";
 
-var glaccountinfo = "select * from gl_account_organization_and_class where organisation_party_id = ?";
+var glaccountinfo = "select * from gl_account_organisation_and_class where organisation_party_id = ?";
 
 var importAmazonPaymentSheet = exports.importAmazonPaymentSheet = function (record) {
     db.beginTransaction(function (err, transaction) {
@@ -106,36 +105,6 @@ function insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_seq_id,acctg_tra
 
 function insertingGlAccountOrganisationAndClass(){
 
-db.beginTransaction(function (err, transaction) {
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"12345","PAXCOM","INTERNAL_ORGANIZATIO","BANK_STLMNT_ACCOUNT","ASSET","BANK_ACCOUNT");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"908001","AMAZON","COMSN_AGENT","COMMISSION_EXPENSE","EXPENSE","MarketPlace Amazon Commission A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"908004","AMAZON","SERVICE_TAX_AUTH","TAX_ACCOUNT","EXPENSE","MarketPlace Amazon Service Tax A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"908006","AMAZON","CNCL_AGENT","CANCELLATION_EXPENSE","EXPENSE","MarketPlace Amazon Cancellation Fee A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"10080","AMAZON","SALES_REP","ACCOUNTS_RECEIVABLE","ASSET","MarketPlace AMAZON A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"908003","AMAZON","CARRIER","REV_SHIPPING_EXPENSE","EXPENSE","MarketPlace Amazon Reverse Shipping A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"908002","AMAZON","CARRIER","SHIPPING_EXPENSE","EXPENSE","MarketPlace Amazon Shipping A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"908008","AMAZON","CUSTOMER","CUSTOMER_ACCOUNT","ASSET","Amazon Customer Group A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"908005","AMAZON","EMI_AGENT","EMI_EXPENSE","EXPENSE","MarketPlace Amazon EMI Fee A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"908007","AMAZON","PROTECTN_FUND_AGENT","PROTECTION_FUND","INCOME","MarketPlace Amazon Protection Fund A/C");
-	
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"909001","AMAZON","COMSN_AGENT","COMMISSION_EXPENSE","EXPENSE","MarketPlace Flipkart Commission A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"909004","AMAZON","SERVICE_TAX_AUTH","TAX_ACCOUNT","EXPENSE","MarketPlace Flipkart Service Tax A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"909006","AMAZON","CNCL_AGENT","CANCELLATION_EXPENSE","EXPENSE","MarketPlace Flipkart Cancellation Fee A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"10081","AMAZON","SALES_REP","ACCOUNTS_RECEIVABLE","ASSET","MarketPlace Flipkart A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"909003","AMAZON","CARRIER","REV_SHIPPING_EXPENSE","EXPENSE","MarketPlace Flipkart Reverse Shipping A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"909002","AMAZON","CARRIER","SHIPPING_EXPENSE","EXPENSE","MarketPlace Flipkart Shipping A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"909008","AMAZON","CUSTOMER","CUSTOMER_ACCOUNT","ASSET","Flipkart Customer Group A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"909005","AMAZON","EMI_AGENT","EMI_EXPENSE","EXPENSE","MarketPlace Flipkart EMI Fee A/C");
-	transaction.run(insertGlAccountOrganizationAndClassQuery,"909007","AMAZON","PROTECTN_FUND_AGENT","PROTECTION_FUND","INCOME","MarketPlace Flipkart Protection Fund A/C");
-	
-	
-		transaction.commit(function (err) {
-		    if (err) {
-			console.error(err);
-			transaction.rollback();
-		    }
-		});
-	});
 
 }
 

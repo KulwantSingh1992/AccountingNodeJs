@@ -24,27 +24,27 @@ function storePaymentSheetData(req,res) {
 		//  excel.excel(util.inspect(files['upload']['path']));
 		  sheetType=fields['sheetType'];
 	 	 if(fields['format']=='csv'){
-			fs.copy(files['upload']['path'], '../../../TempUploaded/file.csv', { replace: false },
+			fs.copy(files['upload']['path'], '../TempUploaded/file.csv', { replace: false },
 		 		function (err) {
 		        		if (err) {
 		           			// i.e. file already exists or can't write to directory
 						throw err;
 				} else {
 				    console.log('hanji');
-					csvParser.csvParse('../../../TempUploaded/file.csv',sheetType,res);
-					fs.remove('../../../TempUploaded/file.csv');  //this line should come in each of parsing file .
+					csvParser.csvParse('../TempUploaded/file.csv',sheetType,res);
+					fs.remove('../TempUploaded/file.csv');  //this line should come in each of parsing file .
 			          }
 	  
 			});
 	     	} else if(fields['format']=='xlsx'){
-			fs.copy(files['upload']['path'], '../../../TempUploaded/file.xlsx', { replace: false },
+			fs.copy(files['upload']['path'], '../TempUploaded/file.xlsx', { replace: false },
         		function (err) {
                   		if (err) {
 				    // i.e. file already exists or can't write to directory
 				        throw err;
 				} else {
-					        excelParser.excelParse('../../../TempUploaded/file.xlsx',sheetType,res);
-                 			fs.remove('../../../TempUploaded/file.xlsx'); //this line should come in each of parsing file .
+					        excelParser.excelParse('../TempUploaded/file.xlsx',sheetType,res);
+                 			fs.remove('../TempUploaded/file.xlsx'); //this line should come in each of parsing file .
                    		}
 			 });
 		}

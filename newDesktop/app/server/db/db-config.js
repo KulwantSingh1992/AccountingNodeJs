@@ -2,9 +2,14 @@ var fs = require("fs"),
     sqlite3 = require('sqlite3').verbose(),
     TransactionDatabase = require("sqlite3-transactions").TransactionDatabase;
 
+if(/^lin/.test(process.platform)){
+dbFolder ="/tmp/Paxcom",
+dbFile = dbFolder + "/paxcom.db";}
+else if(/^win/.test(process.platform)){
 dbFolder = process.env.APPDATA + "\\Paxcom",
-dbFile = dbFolder + "\\paxcom.db",
+dbFile = dbFolder + "\\paxcom.db";}
 exists = fs.existsSync(dbFolder);
+
 
 var insertGlAccountOrganisationAndClassQuery = "INSERT OR REPLACE INTO gl_account_organisation_and_class(gl_account_id,organisation_party_id,role_type_id,gl_account_type_id,gl_account_class_id,account_name) VALUES (?,?,?,?,?,?);"
 
