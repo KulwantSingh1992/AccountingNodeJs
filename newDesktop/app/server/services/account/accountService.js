@@ -326,9 +326,9 @@ var orderStatus=orderInfoMap.get("orderStatus");
 	 
 	}
 	
-	function tableViewResponse(res){
+	function tableViewTransResponse(res){
 	  var view;
-	  view="<table border='1'><th>AcctgTransId</th><th>AcctgTransTypeId</th><th>Description</th><th>Transaction Date</th><th>Voucher Ref Id</th><th>Voucher Ref Date</th><th>OrderId</th>";
+	  view="<a href=\"/viewDataTransEntry\">Account Transactions Entry</a><br> <a href='/'>Back</a> <br> <table border='1'><th>AcctgTransId</th><th>AcctgTransTypeId</th><th>Description</th><th>Transaction Date</th><th>Voucher Ref Id</th><th>Voucher Ref Date</th><th>OrderId</th>";
 	  accountDB.acctTransView(view,function(views){
 	  res.writeHead(200, {'content-type': 'text/html'});
 	  res.write(views);
@@ -336,8 +336,22 @@ var orderStatus=orderInfoMap.get("orderStatus");
 	  
 	
 	}
+	
+	function tableViewTransEntryResponse(res){
+	  var view;
+	  view="<a href=\"/viewDataTrans\"> Account Transactions</a> <br> <a href='/'>Back</a> <br> <table border='1'> "+
+	      "<th>AcctgTransId</th> <th>AcctgTransEntryId</th> <th>AcctgTransEntryTypeId</th> <th>PartyId</th> <th>RoleTypeId</th> <th>GlAccountTypeId</th> <th>GlAccountId</th> <th>OrganisationPartyId</th>"+
+		  "<th>Amount</th> <th>CurrencyUomId</th> <th>DebitCreditFlag</th> <th>ReconcileStatusId</th> <th>GlAccountClass</th>";
+	accountDB.acctTransEntryView(view,function(views){
+	  res.writeHead(200, {'content-type': 'text/html'});
+	  res.write(views);
+	  res.end();});
+	  
+	
+	}
 
-exports.tableViewResponse=tableViewResponse;
+exports.tableViewTransResponse=tableViewTransResponse;
+exports.tableViewTransEntryResponse=tableViewTransEntryResponse;
 exports.storePaymentSheetData=storePaymentSheetData;
 exports.createAmazonPaymentSheet=createAmazonPaymentSheet;
 exports.createFlipkartPaymentSheet=createFlipkartPaymentSheet;

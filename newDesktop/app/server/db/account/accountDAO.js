@@ -129,14 +129,38 @@ db.all(acctTransViewQuery,function(err,rows){
 
 }
 
-function acctTransEntryView(){
+function acctTransEntryView(view,fun){
 
 db.all(acctgTransEntryViewQuery,function(err,rows){
 
+                   for(var i=0;i<rows.length;i++)
+							   {
+							 
+							   view+='<tr>';
+								  view+='<td>'+rows[i]["acctg_trans_id"]+'</td>'
+								  view+='<td>'+rows[i]["acctg_trans_entry_seq_id"]+'</td>'
+								  view+='<td>'+rows[i]["acctg_trans_entry_type_id"]+'</td>'
+								  view+='<td>'+rows[i]["party_id"]+'</td>'
+								  view+='<td>'+rows[i]["role_type_id"]+'</td>'
+								  view+='<td>'+rows[i]["gl_account_type_id"]+'</td>'
+								  view+='<td>'+rows[i]["gl_account_id"]+'</td>'
+								  view+='<td>'+rows[i]["organisation_party_id"]+'</td>'
+								  view+='<td>'+rows[i]["amount"]+'</td>'
+								  view+='<td>'+rows[i]["currency_uom_id"]+'</td>'
+								  view+='<td>'+rows[i]["debit_credit_flag"]+'</td>'
+								  view+='<td>'+rows[i]["reconcile_status_id"]+'</td>'
+								  view+='<td>'+rows[i]["gl_account_class"]+'</td>'
+								  view+='</tr>';
+								 
+							  }
+								
+							  view+="</table>";
+							  fun(view);
+                             });
 
-               });
-}
+               }
 
+exports.acctTransEntryView=acctTransEntryView;
 exports.acctTransView=acctTransView;
 exports.refAlreadyExistsAmazon=refAlreadyExistsAmazon;
 exports.refAlreadyExistsFlipkart=refAlreadyExistsFlipkart;
