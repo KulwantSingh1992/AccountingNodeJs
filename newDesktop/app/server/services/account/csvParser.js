@@ -60,6 +60,7 @@ function csvParse(file, sheetType,res){
 					orderMap.set("orderStatus", data[2]);
 					orderMap.set("otherTransactionFee", Number(data[18]) + Number(tempMap["otherTransactionFee"]));
 					orderMap.set("invoiceId", "INV11");
+					orderMap.set("salesRepPartyId","AMAZON");
 					var totalMarketplaceFee = Number(data[16]) + Number(data[18]) + Number(data[13]);
 					orderMap.set("totalMarketPlaceFee", totalMarketplaceFee + Number(tempMap["totalMarketPlaceFee"]));
 					orderMap.set("refundedPayment", refundedPayment);
@@ -85,6 +86,7 @@ function csvParse(file, sheetType,res){
 					var totalMarketplaceFee = Number(data[16]) + Number(data[18]) + Number(data[13]);
 					orderMap.set("totalMarketPlaceFee" , totalMarketplaceFee);
 					orderMap.set("refundedPayment" ,refundedPayment);
+					orderMap.set("salesRepPartyId","AMAZON");
 					orderInfo.set(data[3], orderMap);
 					
 				}
@@ -99,6 +101,7 @@ function csvParse(file, sheetType,res){
 })
 		    .on("end", function(){
 			//fs.remove('../../../TempUploaded/file.csv');
+			    
 				accountService.createPaymentTransactions(orderInfo);
 		    });
 	} else if (sheetType == "flipkart") {
@@ -142,6 +145,7 @@ function csvParse(file, sheetType,res){
                orderInfoMap.set("cancellationFee", data[29]);
                orderInfoMap.set("invoiceId", data[8]);
                orderInfoMap.set("externalOrderId", data[2]);
+			   orderInfoMap.set("salesRepPartyId", "FLIPKART");
                orderInfo.set(data[2], orderInfoMap);
 				} 
 			}
@@ -151,7 +155,7 @@ function csvParse(file, sheetType,res){
 		    })
 		    .on("end", function(){
 			 //fs.remove('../../../TempUploaded/file.csv');
-			 orderInfo.set("salesRepPartyId") = "FLIPKART";
+			 
 			 accountService.createPaymentTransactions(orderInfo);
 		    });
 	}

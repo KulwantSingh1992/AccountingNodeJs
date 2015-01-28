@@ -17,12 +17,12 @@ app.configure('development', function () {
     app.use(express.errorHandler());
 });
 
-var amazonOrderService = require('./server/services/order/amazonOrderService');
+//var amazonOrderService = require('./server/services/order/amazonOrderService');
 var analyticsEngine = require('./server/analytics/analyticsengine');
-var flipkartOrderService = require('./server/services/order/flipkartOrderService');
+//var flipkartOrderService = require('./server/services/order/flipkartOrderService');
 var flipkartProductService = require('./server/services/product/flipkartProductService');
 //var orderService = require('./server/services/order/orderService');
-var paytmOrderService = require('./server/services/order/paytmOrderService');
+//var paytmOrderService = require('./server/services/order/paytmOrderService');
 var paytmProductService = require('./server/services/product/paytmProductService');
 var productService = require('./server/services/product/productService');
 var dashboardService = require('./server/services/dashboardService');

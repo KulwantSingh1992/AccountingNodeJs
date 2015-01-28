@@ -81,48 +81,69 @@ function insertAcctgTrans(acctg_trans_id, acctg_trans_type_id, description, tran
 function insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,party_id, role_type_id, gl_account_type_id , gl_account_id, organization_party_id, amount, currency_uom_idT, debit_credit_flag, reconcile_status_id, gl_account_class){
       accountDB.insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,party_id, role_type_id, gl_account_type_id , gl_account_id, organization_party_id, amount, currency_uom_idT, debit_credit_flag, reconcile_status_id, gl_account_class);
 }
+var bankStmGlAccountId = null;
+	var txaccountGlAccountId=null;
+	var cmexpGlAccountId=null;
+	var shpexpGlAccountId=null;
+	var cnexpGlAccountId=null;
+	var bankGlAccountName = null;
+	var accrcblGlAccountName=null;
+	var serviceTaxGlAccountId = null;
 
 function createPaymentTransactions(orderMap) {
-	console.log("=======orderMap====="+orderMap);
+	//console.log("=======orderMap====="+orderMap);
 	orderMap.forEach(function(orderInfoMap, key) {
 	
 	
 	//get gl account
-	String bankStmGlAccountId = null;
-	String txaccountGlAccountId=null;
-	String cmexpGlAccountId=null;
-	String shpexpGlAccountId=null;
-	String cnexpGlAccountId=null;
-	String bankGlAccountName = null;
-	String accrcblGlAccountName=null;
-	String serviceTaxGlAccountId = null;
-	var rows=accountDB.getGlAccountInfo(orderInfoMap.get("salesRepPartyId"));
-	for(var row : rows) {
-		if(row["glAccountTypeId"] == "BANK_STLMNT_ACCOUNT") {
-			bankStmGlAccountId = row["glAccountId"];
-		}
-		else if(row["glAccountTypeId"]=="TAX_ACCOUNT"){
-		    txaccountGlAccountId=row["glAccountId"];
-		}
-		else if(row["glAccountTypeId"]=="COMISSION_EXPENSE"){
-		    cmexpGlAccountId=row["glAccountId"];
-		}
-		else if(row["glAccountTypeId"]=="ACCOUNT_RECEIVABLE"){
-		   accrcblGlAccountName=row["glAccountId"];
-		}
-		else if(row["glAccountId"]=="CANCELLATION_EXPENSE"){
-		   cnexpGlAccountId=row["glAccountId"];
-		}
-		else if(row["glAccountId"]=="SHIPPING_EXPENSE"){
-		   shpexpGlAccountId=row["glAccountId"];
-		}
-	}
 	
-	//
-	var orderStatus=orderInfoMap.get("orderStatus").toString();
-	console.log("======orderStatus======"+orderStatus);
+	//console.log(orderInfoMap.get("shippingCharges"));
+	var rows;
+	var count=0;
+	accountDB.getGlAccountInfo(orderInfoMap.get("salesRepPartyId"),function(rows){
+	rows.forEach(function(row,key) {
+	if(row["gl_account_type_id"] == "BANK_STLMNT_ACCOUNT") {
+			bankStmGlAccountId = row["gl_account_id"];
+		}
+		else if(row["gl_account_type_id"]=="TAX_ACCOUNT"){
+		    txaccountGlAccountId=row["gl_account_id"];
+		}
+		else if(row["gl_account_type_id"]=="COMISSION_EXPENSE"){
+		    cmexpGlAccountId=row["gl_account_id"];
+		}
+		else if(row["gl_account_type_id"]=="ACCOUNT_RECEIVABLE"){
+		   accrcblGlAccountName=row["gl_account_id"];
+		}
+		else if(row["gl_account_type_id"]=="CANCELLATION_EXPENSE"){
+		   cnexpGlAccountId=row["gl_account_id"];
+		}
+		else if(row["gl_account_type_id"]=="SHIPPING_EXPENSE"){
+		   shpexpGlAccountId=row["gl_account_id"];
+		}
+	count++;
+	if(count==rows.length-1)
+	mainfunction(orderInfoMap);
+	});
+	
+	
+	});
+	//console.log(orderInfoMap.get("salesRepPartyId"));
+	
+	
+	// console.log("ship"+shpexpGlAccountId);
+	// console.log("cance"+cnexpGlAccountId);
+	// console.log("accr"+accrcblGlAccountName);
+	// console.log("commi"+cmexpGlAccountId);
+	// //
+	
+});}
+
+function mainfunction(orderInfoMap){
+var orderStatus=orderInfoMap.get("orderStatus");
+	//console.log("======orderStatus======"+orderStatus);
 	if(((orderStatus.indexOf("delivered") != -1) || (orderStatus.indexOf("shipped") != -1) || (orderStatus.indexOf("confirmed")!=-1) || 
-	   (orderStatus.indexOf("dispute_resolved")!=-1) || (orderStatus.indexOf("Shipping Services")!=-1) || (orderStatus.indexOf("Order")!=-1)) && Number(orderInfoMap.get("totalMarketPlaceFee")) > 0) {
+	   (orderStatus.indexOf("dispute_resolved")!=-1) || (orderStatus.indexOf("Shipping Services")!=-1) || (orderStatus.indexOf("Order")!=-1)) && Number(orderInfoMap.get("totalMarketPlaceFee")) > 0) 
+	   {
 		var bankAmount = Number(orderInfoMap.get("invoiceAmount")) - Number(orderInfoMap.get("totalMarketPlaceFee"));
 		var debitCreditFlag;
 		if(bankAmount >= 0) {
@@ -174,17 +195,17 @@ function createPaymentTransactions(orderMap) {
 		
 		//2nd Transaction
 		acctg_trans_id = uuid.v4();
-		insertAcctgTrans(acctg_trans_id,"PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",orderInfoMap["settlementRefNo"],
-		orderInfoMap["settlementDate"], orderInfoMap["externalOrderId"],null, null, "BILL_TO_CUSTOMER");
+		insertAcctgTrans(acctg_trans_id,"PAYMENT_ACCTG_TRANS","Payment", Date.now(),"Y",orderInfoMap.get("settlementRefNo"),
+		orderInfoMap.get("settlementDate"), orderInfoMap.get("externalOrderId"),null, null, "BILL_TO_CUSTOMER");
 		//1st entry
 		acctg_trans_entry_id = uuid.v4();
-		insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"), orderInfoMap
+		insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_", orderInfoMap
 			.get("salesRepPartyId"),"SALES_REP", "ACCOUNTS_RECEIVABLE", accrcblGlAccountName,"PAXCOM",Number(orderInfoMap.get("invoiceAmount")),"INR", 
 			"D", "AES_NOT_RECONCILED", "ASSET");
 		//2nd entry
 		acctg_trans_entry_id = uuid.v4();
-		insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"), "custPartyId",
-			"CUSTOMER",    "ACCOUNTS_RECEIVABLE", accrcblGlAccountName,"PAXCOM",Number(orderInfoMap.get("invoiceAmount")),"INR", "C", "AES_NOT_RECONCILED",    "ASSET");
+		insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap
+			.get("salesRepPartyId"),"CUSTOMER",    "ACCOUNTS_RECEIVABLE", accrcblGlAccountName,"PAXCOM",Number(orderInfoMap.get("invoiceAmount")),"INR", "C", "AES_NOT_RECONCILED",    "ASSET");
 		   //Add code to settle/unsettle transactions(Currently all are posted)
 	} else if(orderStatus.indexOf( "cancelled")!=-1  && Number(orderInfoMap.get("totalMarketPlaceFee")) > 0) {
 		//Get data from GlAccount entity
@@ -277,8 +298,9 @@ function createPaymentTransactions(orderMap) {
 	 }
 	 //Put transactionId in OrderHeader
 	 //Mark transactions settle/unsettle
-	});
-}
+	}
+
+
 exports.storePaymentSheetData=storePaymentSheetData;
 exports.createAmazonPaymentSheet=createAmazonPaymentSheet;
 exports.createFlipkartPaymentSheet=createFlipkartPaymentSheet;

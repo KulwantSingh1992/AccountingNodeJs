@@ -11,7 +11,7 @@ var refExistsCount = "select * from payment_sheet_summary where settlement_ref_i
 
 var getDataFromPaymentSummary="select * from payment_sheet_summary";
 
-var glaccountinfo = "select * from gl_account_organization_and_class where organization_party_id = ?  ";
+var glaccountinfo = "select * from gl_account_organization_and_class where organisation_party_id = ?";
 
 var importAmazonPaymentSheet = exports.importAmazonPaymentSheet = function (record) {
     db.beginTransaction(function (err, transaction) {
@@ -42,9 +42,9 @@ var importFlipkartPaymentSheet = exports.importFlipkartPaymentSheet = function (
 
 }
 
-function getGlAccountInfo(organization_party_id){
+function getGlAccountInfo(organisation_party_id,fun){
 
-db.all(glaccountinfo,organization_party_id,function(err,rows){return rows;};
+db.all(glaccountinfo,organisation_party_id,function(err,rows){fun(rows);});
 
 }
 
@@ -103,5 +103,6 @@ function insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_seq_id,acctg_tra
 
 exports.refAlreadyExistsAmazon=refAlreadyExistsAmazon;
 exports.refAlreadyExistsFlipkart=refAlreadyExistsFlipkart;
+exports.getGlAccountInfo=getGlAccountInfo;
 exports.insertAcctgTrans=insertAcctgTrans;
 exports.insertAcctgTransEntry=insertAcctgTransEntry;
