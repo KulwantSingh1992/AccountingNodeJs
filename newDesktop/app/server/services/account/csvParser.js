@@ -17,16 +17,19 @@ function csvParse(file, sheetType,res){
 		csvStream = csv.parse()
 		    .on("data", function(data){
 			if(count<8){
-			if(count==7){
-			if(data.length==21)
-			{ 
-			if(false&&!sequenceCheck(data,sheetType)){resss(res,'csv sheet seqence problem');count++;return;}
-			else {validated=true;resss(res,'all done');}
+				if(count==7){
+					if(data.length==21) { 
+						if(!sequenceCheck(data,sheetType)){
+							resss(res,'csv sheet seqence problem');count++;
+							console.log("sheet error=====");return;
+					}else {
+							validated=true;resss(res,'all done');
+						}
+					} else {
+						resss(res,'csv sheet row count not correct');count++;return;
+					}
+				} count++;
 			}
-			else {resss(res,'csv sheet row count not correct');count++;return;}
-			}
-			
-			count++;}
 			else //console.log(data);
 			{
 			  if(validated)	{
@@ -113,7 +116,7 @@ function csvParse(file, sheetType,res){
 			 //queries.queryInsert(db,data,'csv');
             if(count==0){
 			//console.log(data);
-			if(data.length==39){ if(false&&!sequenceCheck(data,sheetType)){resss(res,'csv sheetseqence problem not correct');count++;return;}
+			if(data.length==39){ if(sequenceCheck(data,sheetType)){resss(res,'csv sheetseqence problem not correct');count++;return;}
 			else {validated=true;resss(res,'all done');}
 			}
 			else {resss(res,'csv sheet row count not correct');return;}
@@ -145,6 +148,7 @@ function csvParse(file, sheetType,res){
                orderInfoMap.set("cancellationFee", data[29]);
                orderInfoMap.set("invoiceId", data[8]);
                orderInfoMap.set("externalOrderId", data[2]);
+		orderInfoMap.set("totalMarketPlaceFee" , data[17]);
 			   orderInfoMap.set("salesRepPartyId", "FLIPKART");
                orderInfo.set(data[2], orderInfoMap);
 				} 
@@ -155,17 +159,17 @@ function csvParse(file, sheetType,res){
 		    })
 		    .on("end", function(){
 			 //fs.remove('../../../TempUploaded/file.csv');
-			 
-			 accountService.createPaymentTransactions(orderInfo);
+			accountService.createPaymentTransactions(orderInfo);
 		    });
 	}
 	stream.pipe(csvStream); // Need to be tested if required
 }
 
 function resss(res,code){
+	console.log("callback called");
 	res.writeHead(200, {'content-type': 'text/plain'});
 	res.write(code);
-	res.end('kulwanignh');
+	res.end();
 }
 
 function sequenceCheck(data,sheetType){
