@@ -59,15 +59,15 @@ function populateDatabase(db) {
 	transaction.run(insertGlAccountOrganisationAndClassQuery,"908005","AMAZON","EMI_AGENT","EMI_EXPENSE","EXPENSE","MarketPlace Amazon EMI Fee A/C");
 	transaction.run(insertGlAccountOrganisationAndClassQuery,"908007","AMAZON","PROTECTN_FUND_AGENT","PROTECTION_FUND","INCOME","MarketPlace Amazon Protection Fund A/C");
 	
-	transaction.run(insertGlAccountOrganisationAndClassQuery,"909001","AMAZON","COMSN_AGENT","COMMISSION_EXPENSE","EXPENSE","MarketPlace Flipkart Commission A/C");
-	transaction.run(insertGlAccountOrganisationAndClassQuery,"909004","AMAZON","SERVICE_TAX_AUTH","TAX_ACCOUNT","EXPENSE","MarketPlace Flipkart Service Tax A/C");
-	transaction.run(insertGlAccountOrganisationAndClassQuery,"909006","AMAZON","CNCL_AGENT","CANCELLATION_EXPENSE","EXPENSE","MarketPlace Flipkart Cancellation Fee A/C");
-	transaction.run(insertGlAccountOrganisationAndClassQuery,"10081","AMAZON","SALES_REP","ACCOUNTS_RECEIVABLE","ASSET","MarketPlace Flipkart A/C");
-	transaction.run(insertGlAccountOrganisationAndClassQuery,"909003","AMAZON","CARRIER","REV_SHIPPING_EXPENSE","EXPENSE","MarketPlace Flipkart Reverse Shipping A/C");
-	transaction.run(insertGlAccountOrganisationAndClassQuery,"909002","AMAZON","CARRIER","SHIPPING_EXPENSE","EXPENSE","MarketPlace Flipkart Shipping A/C");
-	transaction.run(insertGlAccountOrganisationAndClassQuery,"909008","AMAZON","CUSTOMER","CUSTOMER_ACCOUNT","ASSET","Flipkart Customer Group A/C");
-	transaction.run(insertGlAccountOrganisationAndClassQuery,"909005","AMAZON","EMI_AGENT","EMI_EXPENSE","EXPENSE","MarketPlace Flipkart EMI Fee A/C");
-	transaction.run(insertGlAccountOrganisationAndClassQuery,"909007","AMAZON","PROTECTN_FUND_AGENT","PROTECTION_FUND","INCOME","MarketPlace Flipkart Protection Fund A/C");
+	transaction.run(insertGlAccountOrganisationAndClassQuery,"909001","FLIPKART","COMSN_AGENT","COMMISSION_EXPENSE","EXPENSE","MarketPlace Flipkart Commission A/C");
+	transaction.run(insertGlAccountOrganisationAndClassQuery,"909004","FLIPKART","SERVICE_TAX_AUTH","TAX_ACCOUNT","EXPENSE","MarketPlace Flipkart Service Tax A/C");
+	transaction.run(insertGlAccountOrganisationAndClassQuery,"909006","FLIPKART","CNCL_AGENT","CANCELLATION_EXPENSE","EXPENSE","MarketPlace Flipkart Cancellation Fee A/C");
+	transaction.run(insertGlAccountOrganisationAndClassQuery,"10081","FLIPKART","SALES_REP","ACCOUNTS_RECEIVABLE","ASSET","MarketPlace Flipkart A/C");
+	transaction.run(insertGlAccountOrganisationAndClassQuery,"909003","FLIPKART","CARRIER","REV_SHIPPING_EXPENSE","EXPENSE","MarketPlace Flipkart Reverse Shipping A/C");
+	transaction.run(insertGlAccountOrganisationAndClassQuery,"909002","FLIPKART","CARRIER","SHIPPING_EXPENSE","EXPENSE","MarketPlace Flipkart Shipping A/C");
+	transaction.run(insertGlAccountOrganisationAndClassQuery,"909008","FLIPKART","CUSTOMER","CUSTOMER_ACCOUNT","ASSET","Flipkart Customer Group A/C");
+	transaction.run(insertGlAccountOrganisationAndClassQuery,"909005","FLIPKART","EMI_AGENT","EMI_EXPENSE","EXPENSE","MarketPlace Flipkart EMI Fee A/C");
+	transaction.run(insertGlAccountOrganisationAndClassQuery,"909007","FLIPKART","PROTECTN_FUND_AGENT","PROTECTION_FUND","INCOME","MarketPlace Flipkart Protection Fund A/C");
 	
 	
 		transaction.commit(function (err) {
