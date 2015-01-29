@@ -182,28 +182,6 @@ function sequenceCheck(data,sheetType){
 
 if(sheetType=='amazon'){
 
-console.log(data[0].toString().trim()=="date/time");
-  console.log(data[1].toString().trim()=='settlement id');
-  console.log(data[2].toString().trim()=='type');
-  console.log(data[3].toString().trim()=='order id');
-  console.log(data[4].toString().trim()=='sku');
-  console.log(data[5].toString().trim()=='description');
-  console.log(data[6].toString().trim()=='quantity');
-  console.log(data[7].toString().trim()=='marketplace');
-  console.log(data[8].toString().trim()=='fulfillment');
-  console.log(data[9].toString().trim()=='order city');
-  console.log(data[10].toString().trim()=='order state');
-  console.log(data[11].toString().trim()=='order postal');
-  console.log(data[12].toString().trim()=='product sales');
-  console.log(data[13].toString().trim()=='shipping credits');
-  console.log(data[14].toString().trim()=='promotional rebates');
-  console.log(data[15].toString().trim()=='sales tax collected');
-  console.log(data[16].toString().trim()=='selling fees');
-  console.log(data[17].toString().trim()=='fba fees');
-  console.log(data[18].toString().trim()=='other transaction fees');
-  console.log(data[19].toString().trim()=='other');
-  console.log(data[20].toString().trim()=='total');
-  
 if(data[0].toString().trim()=='date/time'&&data[1].toString().trim()=='settlement id'&&data[2].toString().trim()=='type'&&data[3].toString().trim()=='order id'&&data[4].toString().trim()=='Sku'&&data[5].toString().trim()=='description'&&data[6].toString().trim()=='quantity'&&
 data[7].toString().trim()=='marketplace'&&data[8].toString().trim()=='fulfillment'&&data[9].toString().trim()=='order city'&&
 data[10].toString().trim()=='order state'&&data[11].toString().trim()=='order postal'&&data[12].toString().trim()=='product sales'&&
@@ -211,8 +189,6 @@ data[13].toString().trim()=='shipping credits'&&data[14].toString().trim()=='pro
    return true;
    else return false;}
 else if(sheetType='flipkart'){
-
-  
 
 if(data[0].toString().trim()=='Settlement Ref No.'&&data[1].toString().trim()=='Settlement Date'&&data[2].toString().trim()=='Order ID/FSN'&&data[3].toString().trim()=='Order Item ID'&&data[4].toString().trim()=='Order Date'&&data[5].toString().trim()=='Order Status'&&data[6].toString().trim()=='Seller SKU'&&data[7].toString().trim()=='Quantity'&&data[8].toString().trim()=='Invoice ID (Invoice to Buyer)'
 &&data[9].toString().trim()=='Invoice Date (Invoice to Buyer)'&&data[10].toString().trim()=='Invoice Amount (Invoice to Buyer)'

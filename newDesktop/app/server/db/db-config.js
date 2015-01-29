@@ -44,7 +44,6 @@ function populateDatabase(db) {
    db.run('CREATE TABLE IF NOT EXISTS acctg_trans_entry (acctg_trans_id TEXT, acctg_trans_entry_seq_id TEXT, acctg_trans_entry_type_id TEXT,party_id TEXT, role_type_id TEXT, gl_account_type_id TEXT, gl_account_id, organization_party_id TEXT, amount REAL, currency_uom_id TEXT, debit_credit_flag TEXT, reconcile_status_id TEXT, gl_account_class TEXT,PRIMARY KEY(acctg_trans_id, acctg_trans_entry_seq_id))');
 
    db.run('CREATE TABLE IF NOT EXISTS gl_account_organisation_and_class (gl_account_id INTEGER,organisation_party_id TEXT,role_type_id TEXT,gl_account_type_id TEXT,gl_account_class_id TEXT,account_name TEXT)',function(){
-	console.log("===called=====");
-  	accountDao.glAccountsExists();
+	accountDao.glAccountsExists();
    });
 }
