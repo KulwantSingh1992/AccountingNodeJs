@@ -14,7 +14,8 @@ exports.getAccountingDetails = function(startDate, endDate, cb, err) {
     function invokeAccountingDetails(cred){
         console.log(cred);
         if(cred.URL) tallyService.getAccountingDetails(cred, startDate, endDate, cb, err);
-    }};
+    }
+};
 //Export Upload File code
 function storePaymentSheetData(req,res) {
       var sheetType;
@@ -31,7 +32,6 @@ function storePaymentSheetData(req,res) {
 				} else {
 				    console.log('hanji');
 					csvParser.csvParse(__dirname+'/TempUploaded/file.csv',sheetType,res);
-					response=res;
 					fs.remove(__dirname+'/TempUploaded/file.csv');  //this line should come in each of parsing file .
 			          }
 	  
@@ -44,8 +44,7 @@ function storePaymentSheetData(req,res) {
 				        throw err;
 				} else {
              				excelParser.excelParse(__dirname+'/TempUploaded/file.xlsx',sheetType,res);
-							response=res;
-                 			fs.remove(__dirname+'/TempUploaded/file.xlsx'); //this line should come in each of parsing file .
+							fs.remove(__dirname+'/TempUploaded/file.xlsx'); //this line should come in each of parsing file .
                    		}
 			      });
 		}
@@ -333,8 +332,6 @@ var orderStatus=orderInfoMap.get("orderStatus");
 	  res.writeHead(200, {'content-type': 'text/html'});
 	  res.write(views);
 	  res.end();});
-	  
-	
 	}
 	
 	function tableViewTransEntryResponse(res){
@@ -346,8 +343,6 @@ var orderStatus=orderInfoMap.get("orderStatus");
 	  res.writeHead(200, {'content-type': 'text/html'});
 	  res.write(views);
 	  res.end();});
-	  
-	
 	}
 
 exports.tableViewTransResponse=tableViewTransResponse;
