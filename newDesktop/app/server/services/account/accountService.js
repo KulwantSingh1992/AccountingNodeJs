@@ -23,16 +23,17 @@ function storePaymentSheetData(req,res) {
 	  form.parse(req, function(err, fields, files) {
 		//  excel.excel(util.inspect(files['upload']['path']));
 		  sheetType=fields['sheetType'];
+		console.log("=========sheet type========="+fields['format']);
 	 	 if(fields['format']=='csv'){
-			fs.copy(files['upload']['path'], __dirname+'/TempUploaded/file.csv', { replace: false },
+			fs.copy(files['upload']['path'], './TempUploaded/file.csv', { replace: false },
 		 		function (err) {
 		        		if (err) {
 		           			// i.e. file already exists or can't write to directory
 						throw err;
 				} else {
 				    console.log('hanji');
-					csvParser.csvParse(__dirname+'/TempUploaded/file.csv',sheetType,res);
-					fs.remove(__dirname+'/TempUploaded/file.csv');  //this line should come in each of parsing file .
+					csvParser.csvParse('./TempUploaded/file.csv',sheetType,res);
+					fs.remove('./TempUploaded/file.csv');  //this line should come in each of parsing file .
 			          }
 	  
 			});
@@ -53,9 +54,6 @@ function storePaymentSheetData(req,res) {
 }
 
 function createFlipkartPaymentSheet(data) {
-	
-			//Check sheet's column count, sequence and name
-			//Check if settlementId, date time, type is not empty
 			//Check if settlementId exists in PaymentSummary entity
 			accountDB.refAlreadyExistsFlipkart(data,function(count){if(count==0){
 			accountDB.importFlipkartPaymentSheet(data);
@@ -65,8 +63,6 @@ function createFlipkartPaymentSheet(data) {
 
 function createAmazonPaymentSheet(data) {
 	 
-			//Check sheet's column count, sequence and name
-			//Check if settlementId, date time, type is not empty
 			//Check if settlementId exists in PaymentSummary entity
 			 accountDB.refAlreadyExistsAmazon(data,function(count){if(count==0){
 			 accountDB.importAmazonPaymentSheet(data);
@@ -74,7 +70,7 @@ function createAmazonPaymentSheet(data) {
 		    
 }
 
-var bankStmGlAccountId = "12345";
+	var bankStmGlAccountId = null;
 	var txaccountGlAccountId=null;
 	var cmexpGlAccountId=null;
 	var shpexpGlAccountId=null;
@@ -84,7 +80,7 @@ var bankStmGlAccountId = "12345";
 	var serviceTaxGlAccountId = null;
 	var rvshpexpGlAccountId=null;
 	var cstacctGlAccountId=null;
-var bankStmGlAccountClassId="ASSET"
+	var bankStmGlAccountClassId=null;
 	var txaccountGlAccountClassId=null;
 	var cmexpGlAccountClassId=null;
 	var shpexpGlAccountClassId=null;
@@ -105,9 +101,8 @@ function createPaymentTransactions(orderMap) {
 	//console.log(orderInfoMap.get("shippingCharges"));
 	var rows;
 	var count=0;
-	accountDB.getGlAccountInfo(orderInfoMap.get("salesRepPartyId"),function(rows){
+	accountDB.getGlAccountInfo(orderInfoMap.get("salesRepPartyId"),"PAXCOM",function(rows){
 	rows.forEach(function(row,key) {
-	
 	   if(row["gl_account_type_id"]=="TAX_ACCOUNT"){
 		    txaccountGlAccountId=row["gl_account_id"];
 			txaccountGlAccountClassId=row["gl_account_class_id"]
@@ -135,6 +130,10 @@ function createPaymentTransactions(orderMap) {
 		else if(row["gl_account_type_id"]=="CUSTOMER_ACCOUNT"){
 		   cstacctGlAccountId=row["gl_account_id"];
 		   cstacctGlAccountId=row["gl_account_class_id"];
+		}
+		else if(row["gl_account_type_id"]=="BANK_STLMNT_ACCOUNT"){
+		   bankStmGlAccountId=row["gl_account_id"];
+		   bankStmGlAccountClassId=row["gl_account_class_id"];
 		}
 	count++;
 	if(count==rows.length-1)
