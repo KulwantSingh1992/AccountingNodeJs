@@ -1,7 +1,7 @@
 var fs = require("fs"),
     sqlite3 = require('sqlite3').verbose(),
     TransactionDatabase = require("sqlite3-transactions").TransactionDatabase;
-var accountDao = require('./account/accountDAO');
+
 if(/^lin/.test(process.platform)){
 dbFolder ="/tmp/Paxcom",
 dbFile = dbFolder + "/paxcom.db";}
@@ -18,7 +18,7 @@ if (!exists) {
 }
 
 var db = exports.db = new TransactionDatabase(new sqlite3.Database(dbFile, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE));
-
+var accountDao = require('./account/accountDAO');
 populateDatabase(db);
 
 function populateDatabase(db) {
@@ -45,6 +45,6 @@ function populateDatabase(db) {
 
    db.run('CREATE TABLE IF NOT EXISTS gl_account_organisation_and_class (gl_account_id INTEGER,organisation_party_id TEXT,role_type_id TEXT,gl_account_type_id TEXT,gl_account_class_id TEXT,account_name TEXT)',function(){
 	console.log("===called=====");
-  	accountDao.glAccountsExists(db);
+  	accountDao.glAccountsExists();
    });
 }

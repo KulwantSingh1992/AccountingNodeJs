@@ -77,13 +77,10 @@ db.all(refExistsCount,data[0],data[5],function(err,rows){if(rows.length==0)fun(0
 
 }
 
-function glAccountsExists(dbObject) {
-	dbObject.all(glAccountsExistsCount,function(err,rows){
-		console.log("=====out=======");
+function glAccountsExists() {
+	db.all(glAccountsExistsCount,function(err,rows){
 		if(rows.length==0){
-			console.log("==111111111111111===out=======");
-			 dbObject.beginTransaction(function (err, transaction) {
-				console.log("===222222222222222==out=======");
+			 db.beginTransaction(function (err, transaction) {
 				transaction.run(insertGlAccountOrganisationAndClassQuery,"12345","PAXCOM","INTERNAL_ORGANIZATIO","BANK_STLMNT_ACCOUNT","ASSET","BANK_ACCOUNT");
 				transaction.run(insertGlAccountOrganisationAndClassQuery,"908001","AMAZON","COMSN_AGENT","COMMISSION_EXPENSE","EXPENSE","MarketPlace Amazon Commission A/C");
 				transaction.run(insertGlAccountOrganisationAndClassQuery,"908004","AMAZON","SERVICE_TAX_AUTH","TAX_ACCOUNT","EXPENSE","MarketPlace Amazon Service Tax A/C");

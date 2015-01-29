@@ -4,6 +4,13 @@ var express = require("express");
 var app = express();
 var formidable=require('formidable');
 
+process.on('uncaughtException', function(err) {
+  logger.debug(err);
+    if (err.stack){
+        logger.debug(err.stack);
+    }
+});
+
 
 
 app.configure(function () {
