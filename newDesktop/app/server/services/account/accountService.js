@@ -182,30 +182,30 @@ var orderStatus=orderInfoMap.get("orderStatus");
 			 orderInfoMap.get("settlementDate"), orderInfoMap.get("externalOrderId"),null, null);
 		//1st entry
 			var acctg_trans_entry_id = uuid.v4();
-			insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_id,"_NA_",orderInfoMap.get("settlementDate"),null,null,
-			"BANK_STLMNT_ACCOUNT",bankStmGlAccountId,"PAXCOM",bankAmount,"INR", debitCreditFlag, "AES_NOT_RECONCILED",bankStmGlAccountClassId );
+			insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_id,"_NA_",null,null,
+			"BANK_STLMNT_ACCOUNT",bankStmGlAccountId,"PAXCOM",bankAmount,"INR", debitCreditFlag, "AES_NOT_RECONCILED",bankStmGlAccountClassId);
 		//2nd entry
 		if(orderInfoMap.get("serviceTax") != null) {
 			acctg_trans_entry_id = uuid.v4();
-			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"),null,"SERVICE_TAX_AUTH",
+			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",null,"SERVICE_TAX_AUTH",
 			"TAX_ACCOUNT", txaccountGlAccountId,"PAXCOM",Number(orderInfoMap.get("serviceTax")),"INR", "D", "AES_NOT_RECONCILED", txaccountGlAccountClassId);
 		}
 		//3rd entry
 		if(orderInfoMap.get("cancellationFee") != null){
 			acctg_trans_entry_id = uuid.v4();
-			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"),null,"CNCL_AGENT",
+			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",null,"CNCL_AGENT",
 			"CANCELLATION_EXPENSE", cnexpGlAccountId,"PAXCOM",Number(orderInfoMap.get("cancellationFee")),"INR", "D", "AES_NOT_RECONCILED", cnexpGlAccountClassId);
 		}
 		//4rth entry
 		if(orderInfoMap.get("shippingCharges") != null) {
 			acctg_trans_entry_id = uuid.v4();
-			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"),"carrierPartyId","CARRIER",
+			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_","carrierPartyId","CARRIER",
 			 "SHIPPING_EXPENSE", shpexpGlAccountId,"PAXCOM",Number(orderInfoMap.get("shippingCharges")),"INR", "D", "AES_NOT_RECONCILED",shpexpGlAccountClassId);
 		}
 		//5th entry
 		if(orderInfoMap.get("commissionFee") != null){
 			acctg_trans_entry_id = uuid.v4();
-			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",orderInfoMap.get("settlementDate"),null,"COMSN_AGENT",
+			insertAcctgTransEntry(acctg_trans_id, acctg_trans_entry_id, "_NA_",null,"COMSN_AGENT",
 			"COMMISSION_EXPENSE", cmexpGlAccountId,"PAXCOM",Number(orderInfoMap.get("commissionFee")),
 			"INR", "D", "AES_NOT_RECONCILED", cmexpGlAccountClassId);
 		}

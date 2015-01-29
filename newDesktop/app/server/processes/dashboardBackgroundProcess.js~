@@ -6,7 +6,7 @@ var ae = require('../analytics/analyticsengine');
 
 var productService = require('../services/product/productService');
 var amazonOrderService = require('../services/order/amazonOrderService');
-//var flipkartOrderService = require('../services/order/flipkartOrderService');
+var flipkartOrderService = require('../services/order/flipkartOrderService');
 var paytmOrderService = require('../services/order/paytmOrderService');
 var logger = require('../lib/logger');
 

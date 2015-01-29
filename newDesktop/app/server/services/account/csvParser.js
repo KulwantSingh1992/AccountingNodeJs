@@ -182,30 +182,42 @@ function sequenceCheck(data,sheetType){
 
 if(sheetType=='amazon'){
 
+console.log(data[0].toString().trim()=="date/time");
+  console.log(data[1].toString().trim()=='settlement id');
+  console.log(data[2].toString().trim()=='type');
+  console.log(data[3].toString().trim()=='order id');
+  console.log(data[4].toString().trim()=='sku');
+  console.log(data[5].toString().trim()=='description');
+  console.log(data[6].toString().trim()=='quantity');
+  console.log(data[7].toString().trim()=='marketplace');
+  console.log(data[8].toString().trim()=='fulfillment');
+  console.log(data[9].toString().trim()=='order city');
+  console.log(data[10].toString().trim()=='order state');
+  console.log(data[11].toString().trim()=='order postal');
+  console.log(data[12].toString().trim()=='product sales');
+  console.log(data[13].toString().trim()=='shipping credits');
+  console.log(data[14].toString().trim()=='promotional rebates');
+  console.log(data[15].toString().trim()=='sales tax collected');
+  console.log(data[16].toString().trim()=='selling fees');
+  console.log(data[17].toString().trim()=='fba fees');
+  console.log(data[18].toString().trim()=='other transaction fees');
+  console.log(data[19].toString().trim()=='other');
+  console.log(data[20].toString().trim()=='total');
   
-if(data[0]=='date/time'&&data[1]=='settlement id'&&data[2]=='type'&&data[3]=='order id'&&
-   data[4]=='Sku'&&data[5]=='description'&&data[6]=='quantity'&&data[7]=='marketplace'&&data[8]=='fulfillment'
-   &&data[9]=='order city'&&data[10]=='order state'
-   &&data[11]=='order postal'&&data[12]=='product sales'&&data[13]=='shipping credits'&&data[14]=='promotional rebates'
-   &&data[15]=='sales tax collected'&&data[16]=='selling fees'&&data[17]=='fba fees'
-   &&data[18]=='other transaction fees'&&data[19]=='other'&&data[20]=='total')
+if(data[0].toString().trim()=='date/time'&&data[1].toString().trim()=='settlement id'&&data[2].toString().trim()=='type'&&data[3].toString().trim()=='order id'&&data[4].toString().trim()=='Sku'&&data[5].toString().trim()=='description'&&data[6].toString().trim()=='quantity'&&
+data[7].toString().trim()=='marketplace'&&data[8].toString().trim()=='fulfillment'&&data[9].toString().trim()=='order city'&&
+data[10].toString().trim()=='order state'&&data[11].toString().trim()=='order postal'&&data[12].toString().trim()=='product sales'&&
+data[13].toString().trim()=='shipping credits'&&data[14].toString().trim()=='promotional rebates'&&data[15].toString().trim()=='sales tax collected'&&data[16].toString().trim()=='selling fees'&&data[17].toString().trim()=='fba fees'&&data[18].toString().trim()=='other transaction fees'&&data[19].toString().trim()=='other'&&data[20].toString().trim()=='total')
    return true;
    else return false;}
 else if(sheetType='flipkart'){
 
   
 
-if(data[0]=='Settlement Ref No.'&&data[1]=='Settlement Date'&&data[2]=='Order ID/FSN'&&data[3]=='Order Item ID'&&
-   data[4]=='Order Date'&&data[5]=='Order Status'&&data[6]=='Seller SKU'&&data[7]=='Quantity'&&data[8]=='Invoice ID (Invoice to Buyer)'
-   &&data[9]=='Invoice Date (Invoice to Buyer)'&&data[10]=='Invoice Amount (Invoice to Buyer)'
-   &&data[11]=='Settlement Value (Rs.)'&&data[12]=='Order Item Value (Rs.)'&&data[13]=='Refund (Rs.)'&&data[14]=='Hold (Rs.)'
-   &&data[15]=='Performance Reward (Rs.)'
-   &&data[16]=='Protection Fund (Rs.)'&&data[17]=='Total Marketplace Fee (Rs.)'&&data[18]=='Sub Category'&&data[19]=='Commission Rate'&&data[20]=='Commission (Rs.)'
-   &&data[21]=='Fixed Fee (Rs.)'&&data[22]=='EMI Fee (Rs.)'&&data[23]=='Total Weight/Slab'&&data[24]=='Shipping Zone'
-   &&data[25]=='Shipping Fee(per 500 gms)'&&data[26]=='Shipping Fee (Rs.)'
-   &&data[27]=='Reverse Shipping Fee(per 500 gms)'&&data[28]=='Reverse Shipping Fee (Rs.)'&&data[29]=='Cancellation Fee (Rs.)'
-   &&data[30]=='Fee Discount (Rs.)'&&data[31]=='Service Tax (Rs.)'&&data[32]=='Dispatch Date'&&data[33]=='Delivery Date'&&data[34]=='Cancellation Date'
-   &&data[35]=='Dispute Date'&&data[36]=='Total Offer Amount'&&data[37]=='My Offer Share'&&data[38]=='Flipkart Offer Share'  )
+if(data[0].toString().trim()=='Settlement Ref No.'&&data[1].toString().trim()=='Settlement Date'&&data[2].toString().trim()=='Order ID/FSN'&&data[3].toString().trim()=='Order Item ID'&&data[4].toString().trim()=='Order Date'&&data[5].toString().trim()=='Order Status'&&data[6].toString().trim()=='Seller SKU'&&data[7].toString().trim()=='Quantity'&&data[8].toString().trim()=='Invoice ID (Invoice to Buyer)'
+&&data[9].toString().trim()=='Invoice Date (Invoice to Buyer)'&&data[10].toString().trim()=='Invoice Amount (Invoice to Buyer)'
+&&data[11].toString().trim()=='Settlement Value (Rs.)'&&data[12].toString().trim()=='Order Item Value (Rs.)'&&data[13].toString().trim()=='Refund (Rs.)'&&data[14].toString().trim()=='Hold (Rs.)'&&data[15].toString().trim()=='Performance Reward (Rs.)'&&data[16].toString().trim()=='Protection Fund (Rs.)'&&data[17].toString().trim()=='Total Marketplace Fee (Rs.)'&&data[18].toString().trim()=='Sub Category'&&data[19].toString().trim()=='Commission Rate'&&data[20].toString().trim()=='Commission (Rs.)'&&data[21].toString().trim()=='Fixed Fee (Rs.)'&&data[22].toString().trim()=='EMI Fee (Rs.)'&&data[23].toString().trim()=='Total Weight/Slab'&&data[24].toString().trim()=='Shipping Zone'
+&&data[25].toString().trim()=='Shipping Fee(per 500 gms)'&&data[26].toString().trim()=='Shipping Fee (Rs.)'&&data[27].toString().trim()=='Reverse Shipping Fee(per 500 gms)'&&data[28].toString().trim()=='Reverse Shipping Fee (Rs.)'&&data[29].toString().trim()=='Cancellation Fee (Rs.)'&&data[30].toString().trim()=='Fee Discount (Rs.)'&&data[31].toString().trim()=='Service Tax (Rs.)'&&data[32].toString().trim()=='Dispatch Date'&&data[33].toString().trim()=='Delivery Date'&&data[34].toString().trim()=='Cancellation Date'&&data[35].toString().trim()=='Dispute Date'&&data[36].toString().trim()=='Total Offer Amount'&&data[37].toString().trim()=='My Offer Share'&&data[38].toString().trim()=='Flipkart Offer Share'  )
    return true;
    else return false;
 }
