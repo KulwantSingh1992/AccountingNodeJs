@@ -114,7 +114,7 @@ function csvParse(file, sheetType,res){
 			 //queries.queryInsert(db,data,'csv');
             if(count==0){
 			//console.log(data);
-			if(data.length==39){ if(!sequenceCheck(data,sheetType)){resss(res,'csv sheetseqence problem not correct');count++;return;}
+			if(data.length==39){ if(!sequenceCheck(data,sheetType)){resss(res,'csv sheetseqence problem');count++;return;}
 			else {validated=true;
 			resss(res,"all done");
 			}
@@ -181,15 +181,20 @@ function resss(res,code)
 function sequenceCheck(data,sheetType){
 
 if(sheetType=='amazon'){
+
+  
 if(data[0]=='date/time'&&data[1]=='settlement id'&&data[2]=='type'&&data[3]=='order id'&&
-   data[4]=='sku'&&data[5]=='description'&&data[6]=='quantity'&&data[7]=='marketplace'&&data[8]=='fulfillment'
+   data[4]=='Sku'&&data[5]=='description'&&data[6]=='quantity'&&data[7]=='marketplace'&&data[8]=='fulfillment'
    &&data[9]=='order city'&&data[10]=='order state'
    &&data[11]=='order postal'&&data[12]=='product sales'&&data[13]=='shipping credits'&&data[14]=='promotional rebates'
    &&data[15]=='sales tax collected'&&data[16]=='selling fees'&&data[17]=='fba fees'
    &&data[18]=='other transaction fees'&&data[19]=='other'&&data[20]=='total')
    return true;
-   else false;}
+   else return false;}
 else if(sheetType='flipkart'){
+
+  
+
 if(data[0]=='Settlement Ref No.'&&data[1]=='Settlement Date'&&data[2]=='Order ID/FSN'&&data[3]=='Order Item ID'&&
    data[4]=='Order Date'&&data[5]=='Order Status'&&data[6]=='Seller SKU'&&data[7]=='Quantity'&&data[8]=='Invoice ID (Invoice to Buyer)'
    &&data[9]=='Invoice Date (Invoice to Buyer)'&&data[10]=='Invoice Amount (Invoice to Buyer)'
@@ -198,10 +203,11 @@ if(data[0]=='Settlement Ref No.'&&data[1]=='Settlement Date'&&data[2]=='Order ID
    &&data[16]=='Protection Fund (Rs.)'&&data[17]=='Total Marketplace Fee (Rs.)'&&data[18]=='Sub Category'&&data[19]=='Commission Rate'&&data[20]=='Commission (Rs.)'
    &&data[21]=='Fixed Fee (Rs.)'&&data[22]=='EMI Fee (Rs.)'&&data[23]=='Total Weight/Slab'&&data[24]=='Shipping Zone'
    &&data[25]=='Shipping Fee(per 500 gms)'&&data[26]=='Shipping Fee (Rs.)'
-   &&data[27]=='Reverse Shipping Fee(per 500 gms)'&&data[28]=='Reverse Shipping Fee (Rs.)'&&data[29]=='Cancellation Fee (Rs.)'&&data[30]=='Fee Discount (Rs.)'&&data[31]=='Service Tax (Rs.)'&&data[32]=='Dispatch Date'&&data[33]=='Delivery Date'&&data[34]=='Cancellation Date'
-   &&data[35]=='Dissete Date'&&data[36]=='Total Offer Amount'&&data[37]=='My Offer Share'&&data[38]=='Flipkart Offer Share'  )
+   &&data[27]=='Reverse Shipping Fee(per 500 gms)'&&data[28]=='Reverse Shipping Fee (Rs.)'&&data[29]=='Cancellation Fee (Rs.)'
+   &&data[30]=='Fee Discount (Rs.)'&&data[31]=='Service Tax (Rs.)'&&data[32]=='Dispatch Date'&&data[33]=='Delivery Date'&&data[34]=='Cancellation Date'
+   &&data[35]=='Dispute Date'&&data[36]=='Total Offer Amount'&&data[37]=='My Offer Share'&&data[38]=='Flipkart Offer Share'  )
    return true;
-   else false;
+   else return false;
 }
 
 }
