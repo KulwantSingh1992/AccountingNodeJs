@@ -15,7 +15,7 @@ var glAccountsExistsCount = "select * from gl_account_organisation_and_class";
 
 var getDataFromPaymentSummary="select * from payment_sheet_summary";
 
-var glaccountinfo = "select * from gl_account_organisation_and_class where organisation_party_id = ?";
+var glaccountinfo = "select * from gl_account_organisation_and_class where organisation_party_id IN (?, ?)";
 
 var acctTransViewQuery="select * from acctg_trans";
 
@@ -52,9 +52,9 @@ var importFlipkartPaymentSheet = exports.importFlipkartPaymentSheet = function (
 
 }
 
-function getGlAccountInfo(organisation_party_id,fun){
+function getGlAccountInfo(organisation_party_id,company_party_id, fun){
 
-db.all(glaccountinfo,organisation_party_id,function(err,rows){fun(rows);});
+db.all(glaccountinfo,organisation_party_id,company_party_id, function(err,rows){fun(rows);});
 
 }
 

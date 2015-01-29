@@ -4,15 +4,6 @@ var express = require("express");
 var app = express();
 var formidable=require('formidable');
 
-process.on('uncaughtException', function(err) {
-  logger.debug(err);
-    if (err.stack){
-        logger.debug(err.stack);
-    }
-});
-
-
-
 app.configure(function () {
     //app.set('port', process.env.PORT || 3000);
 	app.listen(3000);
@@ -329,6 +320,7 @@ app.post('/product/:id/sell/:channel', function (req, res) {
 //Upload Sheet Code
 app.post('/showSheetUploadForm', function (req, res) {
     //SendForm to browser
+	console.log("========first req====");
 	accountService.storePaymentSheetData(req,res);
 	//accountService.insertAcctgTrans();
 });
