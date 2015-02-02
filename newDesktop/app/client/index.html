@@ -37,6 +37,12 @@
             <li ng-click="checkNewVersion();"><a href="#">
                 <span class="glyphicon glyphicon-refresh"></span> Check for Updates</a>
             </li>
+			<li ng-click="main.dashboard='importsheet';"><a href="#">
+                <span class="glyphicon glyphicon-refresh"></span> Import Sheet</a>
+            </li>
+			<li ng-click="main.dashboard='viewsheet';"><a href="#">
+                <span class="glyphicon glyphicon-refresh"></span> View Sheet</a>
+            </li>
         </ul>
     </nav>
     <!-- /slide menu left -->
@@ -126,6 +132,8 @@
 		<div ng-include="'views/sell-online/sell.html'"></div>
 		<div ng-include="'bigsales.html'"></div>
 		<div ng-include="'bigrevenue.html'"></div>
+		<div ng-include="'views/setting/import-sheet.html'"></div>
+		<div ng-include="'views/setting/view-sheet.html'"></div>
         <div ng-include="'views/order/orders-details.html'"></div>
         <!--<div ng-include="'return-details.html'"></div>
         <div ng-include="'accounting-details.html'"></div>-->

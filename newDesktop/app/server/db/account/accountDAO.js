@@ -5,7 +5,7 @@ var insertPaymentSummaryQuery = "INSERT OR REPLACE INTO payment_sheet_summary(se
 
 var insertAcctgTransQuery = "INSERT OR REPLACE INTO acctg_trans(acctg_trans_id, acctg_trans_type_id, description, transaction_date, is_posted,voucher_ref,voucher_date,order_id, inventory_item_id, party_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
-var insertAcctgTransEntryQuery = "INSERT OR REPLACE INTO acctg_trans_entry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,  party_id, role_type_id, gl_account_type_id, gl_account_id,organization_party_id,amount,currency_uom_id,debit_credit_flag,reconcile_status_id,gl_account_class) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+var insertAcctgTransEntryQuery = "INSERT OR REPLACE INTO acctg_trans_entry(acctg_trans_id, acctg_trans_entry_seq_id, acctg_trans_entry_type_id,  party_id, role_type_id, gl_account_type_id, gl_account_id,organisation_party_id,amount,currency_uom_id,debit_credit_flag,reconcile_status_id,gl_account_class) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 
 
@@ -128,12 +128,12 @@ db.beginTransaction(function (err, transaction) {
 	});
 }
 function insertAcctgTransEntry(acctg_trans_id,acctg_trans_entry_seq_id,acctg_trans_entry_type_id
-    ,party_id,role_type_id,gl_account_type_id,gl_account_id,organization_party_id,amount,
+    ,party_id,role_type_id,gl_account_type_id,gl_account_id,organisation_party_id,amount,
 	currency_uom_id,debit_credit_flag,reconcile_status_id,gl_account_class){
 	
 	db.beginTransaction(function (err, transaction) {
 	transaction.run(insertAcctgTransEntryQuery, acctg_trans_id,acctg_trans_entry_seq_id,acctg_trans_entry_type_id,
-        party_id,role_type_id,gl_account_type_id,gl_account_id,organization_party_id,amount,currency_uom_id,debit_credit_flag
+        party_id,role_type_id,gl_account_type_id,gl_account_id,organisation_party_id,amount,currency_uom_id,debit_credit_flag
 		,reconcile_status_id,gl_account_class);
 		transaction.commit(function (err) {
 		    if (err) {

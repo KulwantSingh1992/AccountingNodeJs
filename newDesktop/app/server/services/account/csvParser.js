@@ -2,7 +2,7 @@
 var fs=require('fs');
 var csv = require("fast-csv");
 var accountService=require('./accountService');
-var fs=require('fs.extra');
+var fs=require('fs-extra');
 var HashMap=require('hashmap').HashMap;
 var response;
 
@@ -21,14 +21,14 @@ function csvParse(file, sheetType,res){
 			if(count==7){
 			if(data.length==21)
 			{ 
-			if(!sequenceCheck(data,sheetType)){resss(res,'csv sheet seqence problem');count++;return;}
-			else {validated=true;resss(res,"all done");}
+			if(!sequenceCheck(data,sheetType)){resquestHandler(res,'csv sheet seqence problem');count++;return;}
+			else {validated=true;resquestHandler(res,"all done");}
 			}
-			else {resss(res,'csv sheet row count not correct');count++;return;}
+			else {resquestHandler(res,'csv sheet row count not correct');count++;return;}
 			}
 			count++;
 			}
-			else //console.log(data);
+			else 
 			{
 			  if(validated)	{
 			    if(data[0]!=''&&data[1]!=''&&data[2]!='') {
@@ -114,13 +114,13 @@ function csvParse(file, sheetType,res){
 			 //queries.queryInsert(db,data,'csv');
             if(count==0){
 			//console.log(data);
-			if(data.length==39){ if(!sequenceCheck(data,sheetType)){resss(res,'csv sheetseqence problem');count++;return;}
+			if(data.length==39){ if(!sequenceCheck(data,sheetType)){resquestHandler(res,'csv sheetseqence problem');count++;return;}
 			else {validated=true;
-			resss(res,"all done");
+			resquestHandler(res,"all done");
 			}
 			}
 			else {
-			    resss(res,'csv sheet row count not correct');
+			    resquestHandler(res,'csv sheet row count not correct');
 				count++;
 				return;
 				}
@@ -171,11 +171,18 @@ function csvParse(file, sheetType,res){
 	stream.pipe(csvStream); // Need to be tested if required
 }
 
-function resss(res,code)
+function resquestHandler(res,code)
 {
-	res.writeHead(200, {'content-type': 'text/html'});
-	res.write(code);
+	var color ;
+	if(code == 'all done')
+	color="#00FF00";
+	else color ="#FF0040";
+	
+	var data ={'code' : code,'color' : color}
+	res.send(data);
 	res.end();
+	
+	
 }
 
 function sequenceCheck(data,sheetType){

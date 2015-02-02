@@ -320,7 +320,7 @@ app.post('/product/:id/sell/:channel', function (req, res) {
 //Upload Sheet Code
 app.post('/showSheetUploadForm', function (req, res) {
     //SendForm to browser
-	console.log("========first req====");
+	//console.log(req.headers);
 	accountService.storePaymentSheetData(req,res);
 	//accountService.insertAcctgTrans();
 });
@@ -328,7 +328,9 @@ app.post('/showSheetUploadForm', function (req, res) {
 app.get('/viewDataTrans', function (req, res) {
     //use Formidable to parse
     //Get Format
+	
     accountService.tableViewTransResponse(res);
+
 });
 
 app.get('/viewDataTransEntry', function (req, res) {
@@ -336,9 +338,3 @@ app.get('/viewDataTransEntry', function (req, res) {
     //Get Format
     accountService.tableViewTransEntryResponse(res);
 });
-
-
-
-
-
-

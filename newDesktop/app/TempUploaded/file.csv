@@ -1,0 +1,104 @@
+"﻿""Includes Amazon Marketplace", Fulfillment by Amazon (FBA)," and Amazon Webstore transactions""",,,,,,,,,,,,,,,,,,
+"All amounts in INR, unless specified
+
+",,,,,,,,,,,,,,,,,,,,
+Definitions:,,,,,,,,,,,,,,,,,,,,
+"Sales tax collected: Includes sales tax collected from buyers for product sales, shipping, and gift wrap.
+",,,,,,,,,,,,,,,,,,,,
+"Selling fees: Includes variable closing fees, per-item fees, and referral fees.",,,,,,,,,,,,,,,,,,,,
+"Other transaction fees: Includes shipping chargebacks, shipping holdbacks, and sales tax collection fees.
+",,,,,,,,,,,,,,,,,,,,
+"Other: Includes non-order transaction amounts. For more details, see the ""Type"" and ""Description"" columns for each order ID.",,,,,,,,,,,,,,,,,,,,
+date/time,settlement id,type,order id,Sku,description,quantity,marketplace,fulfillment,order city,order state,order postal,product sales,shipping credits,promotional rebates,sales tax collected,selling fees,fba fees,other transaction fees,other,total
+02-Sep-2014 9:57:19 AM GMT+00:00,6473698942,"Shipping Services
+",ORDMM,URNSGGGMZWN44V0ET,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-33.71,-33.71
+02-Sep-2014 9:57:45 AM GMT+00:00,6473698942,"Order
+",ORDMM,URNSGGGMZWN44V0ET,BlackBerry Q5 (Red),1,amazon.in,Merchant,Chennai,Tamilnadu,600106,7290,0,0,0,-772.59,0,-11.24,0,6506.17
+03-Sep-2014 12:31:33 PM GMT+00:00,6476236932,"Refund
+",ORDMMOD10041,URNSGGGMZWN44V0ET,Plantronics Back beat Go 2 (Black),1,amazon.in,Merchant,Bangalore,Karnataka,560078,-7290,0,0,0,1000,0,0,0,-6290
+03-Sep-2014 8:45:24 PM GMT+00:00,6476236932,"Transfer
+",,,To account ending with: ,,,,,,,0,0,0,0,0,0,0,-14545.83,-14545.83
+04-Sep-2014 10:12:41 AM GMT+00:00,6476236932,"Shipping Services
+",403-5716319-5369932,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-44.94,-44.94
+04-Sep-2014 10:12:42 AM GMT+00:00,6476236932,"Shipping Services
+",402-7549194-6456312,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-33.71,-33.71
+04-Sep-2014 10:13:09 AM GMT+00:00,6476236932,"Order
+",402-7549194-6456312,0VSZDE568MQ83PD1,"LG G2 D802 (White, 16GB)",1,amazon.in,Merchant,bangalore,Karnataka,560100,31990,0,0,0,-1437.76,0,-11.24,0,30541
+04-Sep-2014 10:17:25 AM GMT+00:00,6476236932,"Order
+",403-5716319-5369932,QNJYEJN0PR7KGN06,"Datawind Ubislate 7C+ Edge Tablet (WiFi, 3G via Dongle, Voice Calling)",1,amazon.in,Merchant,Madurai,tamilnadu,625004,3970,0,0,0,-178.43,0,-11.24,0,3780.33
+05-Sep-2014 10:37:11 AM GMT+00:00,6476236932,"Shipping Services
+",404-0331253-1610735,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-44.94,-44.94
+05-Sep-2014 10:37:21 AM GMT+00:00,6476236932,"Order
+",404-0331253-1610735,ZVJ84OT733LSYQ,"HCL ME U1 Tablet (WiFi, 3G via Dongle), White",1,amazon.in,Merchant,New Delhi,Delhi,110017,3890,0,0,0,-174.83,0,-11.24,0,3703.93
+08-Sep-2014 12:06:28 PM GMT+00:00,6476236932,"Order
+",404-8147754-3660310,0ANCHFOQCYSO6,Zebronics ZebPad 7C Tablet (WiFi),1,amazon.in,Merchant,THIRUVANANTHAPURAM,KERALA,695004,4050,0,0,0,-182.02,0,-11.24,0,3856.74
+09-Sep-2014 7:21:29 AM GMT+00:00,6476236932,"Order
+",403-7016104-4409961,P4SQ8ODS2AKG3SIAB,HCL ME Y2 Tablet (Black),1,amazon.in,Merchant,kozhikode,Kerala,673601,6490,0,0,0,-291.68,0,-11.24,0,6187.08
+09-Sep-2014 7:27:48 AM GMT+00:00,6476236932,"Order
+",404-7139470-3931510,O4LHHX498EF49,Panasonic T31 Black,1,amazon.in,Merchant,TRIVANDRUM,KERALA,695001,4850,0,0,0,-272.47,0,-11.24,0,4566.29
+10-Sep-2014 8:45:23 PM GMT+00:00,6478806072,"Transfer
+",,,To account ending with: ,,,,,,,0,0,0,0,0,0,0,-30738.86,-30738.86
+15-Sep-2014 8:21:06 AM GMT+00:00,6478806072,"Order
+",404-0488711-5418707,05P7JJ36WE74ZVY,Panasonic P61 (white),1,amazon.in,Merchant,Gangtok,Sikkim,737101,13553,0,0,0,-609.12,0,-11.24,0,12932.64
+18-Sep-2014 9:17:02 AM GMT+00:00,6481478932,"Shipping Services
+",402-6444689-6563538,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-44.94,-44.94
+18-Sep-2014 9:17:22 AM GMT+00:00,6481478932,"Order
+",402-6444689-6563538,VB58Y1IGVK74GKARA,Philips Powerful Wall Charger 2USB 10.5W/2.1A,1,amazon.in,Merchant,Ahmedabad,Gujarat,380008,949,0,0,0,-53.31,0,-11.24,0,884.45
+18-Sep-2014 9:25:50 PM GMT+00:00,6481478932,"Transfer
+",,,To account ending with: ,,,,,,,0,0,0,0,0,0,0,-52635.37,-52635.37
+19-Sep-2014 9:12:13 AM GMT+00:00,6481478932,"Shipping Services
+",403-4898628-3412309,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-44.94,-44.94
+19-Sep-2014 9:12:31 AM GMT+00:00,6481478932,"Order
+",403-4898628-3412309,2MVY3TNBU1A86WE,Philips DLP2259 1A Dual USB Car Charger,1,amazon.in,Merchant,Pune,Maharashtra,411015,710,0,0,0,-39.89,0,-11.24,0,658.87
+20-Sep-2014 6:28:18 AM GMT+00:00,6481478932,"Order
+",171-3067447-8015528,XLV690Q50R28ZU,Micromax X337 Mobile With Multi Effect SMART UI,1,amazon.in,Merchant,trivandrum,kerala,695036,2080,0,0,0,-93.48,0,-11.24,0,1975.28
+20-Sep-2014 9:57:06 AM GMT+00:00,6481478932,"Shipping Services
+",404-1993122-9795556,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-44.94,-44.94
+20-Sep-2014 9:57:26 AM GMT+00:00,6481478932,"Order
+",404-1993122-9795556,THZ1Z6UZRH1CR7SKPL,Karbonn K451+(Silver),1,amazon.in,Merchant,CHANDIGARH,CHANDIGARH,160047,1460,0,0,0,-65.62,0,-11.24,0,1383.14
+22-Sep-2014 6:27:47 AM GMT+00:00,6481478932,"Order
+",404-7578801-0090743,MDFYL0G8REV4YX,Philips DLP2257 Dual USB Car Charger 5V 2.1A for Smartphones and Tablets,1,amazon.in,Merchant,EAST SINGHBHUM,Jharkhand,831001,1027,0,0,0,-57.69,0,-11.24,0,958.07
+22-Sep-2014 9:47:37 AM GMT+00:00,6481478932,"Shipping Services
+",171-6207218-4945116,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-33.71,-33.71
+22-Sep-2014 9:48:05 AM GMT+00:00,6481478932,"Order
+",171-6207218-4945116,XLV690Q50R28ZU,Micromax X337 Mobile With Multi Effect SMART UI,1,amazon.in,Merchant,THANE WEST,MAHARASHTRA,400607,2080,0,0,0,-93.48,0,-11.24,0,1975.28
+23-Sep-2014 6:06:36 AM GMT+00:00,6481478932,"Order
+",403-3090763-1326737,HKEPCL9XYQKGP53M,Karbonn Titanium S5 Plus (Pearl White),1,amazon.in,Merchant,Lucknow,Uttar Pradesh,226001,7040,0,0,0,-316.4,0,-11.24,0,6712.36
+23-Sep-2014 10:52:30 AM GMT+00:00,6481478932,"Shipping Services
+",403-2661272-5308332,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-44.94,-44.94
+23-Sep-2014 10:52:48 AM GMT+00:00,6481478932,"Order
+",403-2661272-5308332,XLV690Q50R28ZU,Micromax X337 Mobile With Multi Effect SMART UI,1,amazon.in,Merchant,vadodara,gujarat,390015,2180,0,0,0,-97.97,0,-11.24,0,2070.79
+24-Sep-2014 7:47:46 AM GMT+00:00,6481478932,"Order
+",404-7890780-8601107,C9CPY7RFPQ0WJFQS,Micromax Bolt X351 (Black-Siver),1,amazon.in,Merchant,Dhanbad,Jharkhand,826001,1540,0,0,0,-69.21,0,-11.24,0,1459.55
+24-Sep-2014 10:57:20 AM GMT+00:00,6481478932,"Shipping Services
+",404-2338976-0125113,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-33.71,-33.71
+24-Sep-2014 10:57:21 AM GMT+00:00,6481478932,"Shipping Services
+",404-4415594-1757942,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-33.71,-33.71
+24-Sep-2014 10:57:41 AM GMT+00:00,6481478932,"Order
+",404-2338976-0125113,XLV690Q50R28ZU,Micromax X337 Mobile With Multi Effect SMART UI,1,amazon.in,Merchant,chennai,tamilnadu,600119,2180,0,0,0,-97.97,0,-11.24,0,2070.79
+24-Sep-2014 10:57:43 AM GMT+00:00,6481478932,"Order
+",404-4415594-1757942,XLV690Q50R28ZU,Micromax X337 Mobile With Multi Effect SMART UI,1,amazon.in,Merchant,CHENNAI,TAMIL NADU,600068,2180,0,0,0,-97.97,0,-11.24,0,2070.79
+24-Sep-2014 8:45:10 PM GMT+00:00,6484022942,"Transfer
+",,,To account ending with: ,,,,,,,0,0,0,0,0,0,0,-12591.12,-12591.12
+26-Sep-2014 10:27:34 AM GMT+00:00,6484022942,"Shipping Services
+",171-2045647-2957110,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-44.94,-44.94
+26-Sep-2014 10:27:57 AM GMT+00:00,6484022942,"Order
+",171-2045647-2957110,05DK7LONQWGS2M,X267 Black,1,amazon.in,Merchant,Pune,Maharashtra,411027,1590,0,0,0,-71.46,0,-11.24,0,1507.3
+27-Sep-2014 9:52:56 AM GMT+00:00,6484022942,"Shipping Services
+",403-7453331-2939530,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-33.71,-33.71
+27-Sep-2014 9:53:14 AM GMT+00:00,6484022942,"Order
+",403-7453331-2939530,XLV690Q50R28ZU,Micromax X337 Mobile With Multi Effect SMART UI,1,amazon.in,Merchant,Chennai,TamilNadu,600004,2180,0,0,0,-97.97,0,-11.24,0,2070.79
+29-Sep-2014 10:17:28 AM GMT+00:00,6484022942,"Shipping Services
+",403-7219316-4740336,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-44.94,-44.94
+29-Sep-2014 10:18:15 AM GMT+00:00,6484022942,"Order
+",403-7219316-4740336,1294WI415LTCPQGF,PNY Transformer Attache 64GB USB Flash Drive,1,amazon.in,Merchant,Pune,Maharashtra,411038,1690,0,0,0,-94.94,0,-11.24,0,1583.82
+29-Sep-2014 2:19:09 PM GMT+00:00,6484022942,"Refund
+",404-6061339-0627504,2WR1O1R1W0N4,"HCL ME Tab V2 Connect 2G Tablet (WiFi, 3G via Dongle, Voice Calling), Silver",1,amazon.in,Merchant,tirupati,ANDHRA PRADESH,517501,-5790,0,0,0,208.17,0,11.24,0,-5570.59
+30-Sep-2014 6:23:46 AM GMT+00:00,6484022942,"Order
+",402-7710434-8046745,HKEPCL9XYQKGP53M,Karbonn Titanium S5 Plus (Pearl White),1,amazon.in,Merchant,DADRA & NAGAR HAVELI,DADRA & NAGAR HAVELI,396230,6540,0,0,0,-293.93,0,-11.24,0,6234.83
+30-Sep-2014 9:37:53 AM GMT+00:00,6484022942,"Shipping Services
+",171-1989617-2341926,,Amazon Easy Ship Charges,,Amazon.in,Merchant,,,,0,0,0,0,0,0,0,-33.71,-33.71
+30-Sep-2014 9:38:14 AM GMT+00:00,6484022942,"Order
+",171-1989617-2341926,ZDKPMZNDFG1SHR4SX,Philips Wall Charger 2USB 5W/1A,1,amazon.in,Merchant,Chennai,Tamil Nadu,600089,650,0,0,0,-36.52,0,-11.24,0,602.24
+30-Sep-2014 11:20:01 AM GMT+00:00,6484022942,"Order
+",404-1403698-6174753,C9CPY7RFPQ0WJFQS,Micromax Bolt X351 (Black-Siver),2,amazon.in,Merchant,Howrah,West Bengal,711102,3160,0,0,0,-142.03,0,-22.47,0,2995.5

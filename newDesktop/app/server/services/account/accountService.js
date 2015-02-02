@@ -2,14 +2,14 @@ var productDB = require('../../db/product/productDAO');
 var accountDB = require('../../db/account/accountDAO');
 var tallyService = require('./tallyAccountService');
 var logger = require('../../lib/logger');
-var fs=require('fs.extra');
+var fs=require('fs-extra');
 var formidable=require('formidable');
 var csvParser=require('./csvParser');
 var excelParser=require('./excelParser');
 var HasMap=require('hashmap').HashMap;
 var uuid = require('node-uuid');
 
-exports.getAccountingDetails = function(startDate, endDate, cb, err) {
+exports.getAccountingDetails = function(startDate, endDate, cb, err){
     productDB.getTallyCredentials(invokeAccountingDetails);
     function invokeAccountingDetails(cred){
         console.log(cred);
@@ -20,32 +20,33 @@ exports.getAccountingDetails = function(startDate, endDate, cb, err) {
 function storePaymentSheetData(req,res) {
       var sheetType;
 	  var form = new formidable.IncomingForm();
+	//  console.log("storePaymentSheetData");
+	  
 	  form.parse(req, function(err, fields, files) {
 		//  excel.excel(util.inspect(files['upload']['path']));
 		  sheetType=fields['sheetType'];
-		console.log("=========sheet type========="+fields['format']);
-	 	 if(fields['format']=='csv'){
-			fs.copy(files['upload']['path'], './TempUploaded/file.csv', { replace: false },
+		   if(fields['format']=='csv'){
+			fs.move(files['upload']['path'], './TempUploaded/file.csv',true,
 		 		function (err) {
 		        		if (err) {
 		           			// i.e. file already exists or can't write to directory
 						throw err;
 				} else {
-				    console.log('hanji');
-					csvParser.csvParse('./TempUploaded/file.csv',sheetType,res);
-					fs.remove('./TempUploaded/file.csv');  //this line should come in each of parsing file .
+				    csvParser.csvParse('./TempUploaded/file.csv',sheetType,res);
+					   //this line should come in each of parsing file .
 			          }
 	  
 			});
 	     	} else if(fields['format']=='xlsx'){
-			fs.copy(files['upload']['path'], __dirname+'/TempUploaded/file.xlsx', { replace: false },
+			 
+		 	fs.move(files['upload']['path'],'./TempUploaded/file.xlsx' ,true,
         		function (err) {
                   		if (err) {
 				    // i.e. file already exists or can't write to directory
 				        throw err;
 				} else {
-             				excelParser.excelParse(__dirname+'/TempUploaded/file.xlsx',sheetType,res);
-							fs.remove(__dirname+'/TempUploaded/file.xlsx'); //this line should come in each of parsing file .
+             				excelParser.excelParse('./TempUploaded/file.xlsx',sheetType,res);
+						 //this line should come in each of parsing file .
                    		}
 			      });
 		}
@@ -69,7 +70,6 @@ function createAmazonPaymentSheet(data) {
 			 }});
 		    
 }
-
 	var bankStmGlAccountId = null;
 	var txaccountGlAccountId=null;
 	var cmexpGlAccountId=null;
@@ -326,21 +326,21 @@ var orderStatus=orderInfoMap.get("orderStatus");
 	
 	function tableViewTransResponse(res){
 	  var view;
-	  view="<a href=\"/viewDataTransEntry\">Account Transactions Entry</a><br> <a href='/'>Back</a> <br> <table border='1'><th>AcctgTransId</th><th>AcctgTransTypeId</th><th>Description</th><th>Transaction Date</th><th>Voucher Ref Id</th><th>Voucher Ref Date</th><th>OrderId</th>";
+	  view="<table border='1'><th>AcctgTransId</th><th>AcctgTransTypeId</th><th>Description</th><th>Transaction Date</th><th>Voucher Ref Id</th><th>Voucher Ref Date</th><th>OrderId</th>";
 	  accountDB.acctTransView(view,function(views){
-	  res.writeHead(200, {'content-type': 'text/html'});
-	  res.write(views);
-	  res.end();});
+	  res.send(views);
+	  res.end();
+	  });
 	}
 	
 	function tableViewTransEntryResponse(res){
 	  var view;
-	  view="<a href=\"/viewDataTrans\"> Account Transactions</a> <br> <a href='/'>Back</a> <br> <table border='1'> "+
+	  view="<table border='1'> "+
 	      "<th>AcctgTransId</th> <th>AcctgTransEntryId</th> <th>AcctgTransEntryTypeId</th> <th>PartyId</th> <th>RoleTypeId</th> <th>GlAccountTypeId</th> <th>GlAccountId</th> <th>OrganisationPartyId</th>"+
 		  "<th>Amount</th> <th>CurrencyUomId</th> <th>DebitCreditFlag</th> <th>ReconcileStatusId</th> <th>GlAccountClass</th>";
+	  
 	accountDB.acctTransEntryView(view,function(views){
-	  res.writeHead(200, {'content-type': 'text/html'});
-	  res.write(views);
+	  res.send(views);
 	  res.end();});
 	}
 
